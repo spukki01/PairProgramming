@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".PlanningPokerActivity"
+            android:name=".PlanningPokerFragment"
             android:label="@string/title_activity_planning_poker" >
 
         </activity>
