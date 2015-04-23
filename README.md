@@ -1,8 +1,6 @@
 Agile Development Processes (EDA397)
 =================
-Group 11
---------
-Members:
+Group 11 - Members:
 --------
 - Williams Opoku
 - Sebastian Pukki
