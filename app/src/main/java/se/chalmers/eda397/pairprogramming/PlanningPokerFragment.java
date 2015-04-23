@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.view.View;
 import android.app.AlertDialog;
+import android.widget.TextView;
 
 public class PlanningPokerFragment extends Fragment implements View.OnClickListener {
 
@@ -60,6 +61,10 @@ public class PlanningPokerFragment extends Fragment implements View.OnClickListe
                 .setTitle("Your chosen number");
 
         AlertDialog dialog = builder.create();
+
         dialog.show();
+
+        TextView textView = (TextView)dialog.findViewById(android.R.id.message);
+        textView.setTextSize(60);
     }
 }
