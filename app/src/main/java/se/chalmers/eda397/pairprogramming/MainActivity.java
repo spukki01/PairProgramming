@@ -77,15 +77,20 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         fragmentManager.beginTransaction()
                 .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
                 .commit();
+
+        switch (position) {
+            case 0:
+
+        }
     }
 
     public void onSectionAttached(int number) {
         switch (number) {
             case 1:
-                mTitle = "Home";
+                mTitle = getString(R.string.drawer_item_home);
                 break;
             case 2:
-                mTitle = "Planning Poker";
+                mTitle = getString(R.string.drawer_item_planning_poker);
                 break;
         }
     }

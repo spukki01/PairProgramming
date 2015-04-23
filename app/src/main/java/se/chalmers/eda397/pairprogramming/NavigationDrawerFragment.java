@@ -101,8 +101,8 @@ public class NavigationDrawerFragment extends Fragment {
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
                 new String[]{
-                        "Home",
-                        "Planning Poker"
+                        getString(R.string.drawer_item_home),
+                        getString(R.string.drawer_item_planning_poker)
                 }));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;
