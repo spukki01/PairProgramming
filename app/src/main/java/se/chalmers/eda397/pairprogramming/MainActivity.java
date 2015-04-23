@@ -27,14 +27,11 @@ import java.io.IOException;
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener {
 
-    private TextView text = null;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        text = (TextView)findViewById(R.id.repo_text);
         final Button button = (Button) findViewById(R.id.repo_search);
         button.setOnClickListener(this);
     }
@@ -107,6 +104,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         }
 
         protected void onPostExecute(String result) {
+            TextView text = (TextView)findViewById(R.id.repo_text);
+
             try {
                 String parsedString = "";
                 JSONObject jResult = new JSONObject(result);

@@ -9,7 +9,7 @@ import android.view.View;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 
-public class PlanningPokerActivity extends ActionBarActivity implements View.OnClickListener {
+public class PlanningPokerActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,22 +41,14 @@ public class PlanningPokerActivity extends ActionBarActivity implements View.OnC
     }
 
 
-    @Override
-    public void onClick(View v) {
+    public void openDialog(View v) {
 
-        //Intent myIntent = new Intent(view.getContext(), agones.class);
-        //startActivityForResult(myIntent, 0);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
+        builder.setMessage(((Button)v).getText())
+                .setTitle("Your chosen number");
 
-        AlertDialog alertDialog = new AlertDialog.Builder(<PlanningPokerActivity>this).create(); //Read Update
-        alertDialog.setTitle("My chosen number");
-        //alertDialog.setMessage((Button) v.getText());
-
-        alertDialog.setButton("Continue..", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                // here you can add functions
-            }
-        });
-        alertDialog.show();  //<-- See This!
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }
