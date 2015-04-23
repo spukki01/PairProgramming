@@ -7,7 +7,6 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.view.View;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 
 public class PlanningPokerActivity extends ActionBarActivity {
 
