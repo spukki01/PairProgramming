@@ -8,10 +8,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
-public class MainActivity extends ActionBarActivity implements View.OnClickListener,
-        NavigationDrawerFragment.NavigationDrawerCallbacks {
+public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -36,22 +34,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
-
-        //final Button button = (Button) findViewById(R.id.repo_search);
-        //button.setOnClickListener(this);
-    }
-
-    @Override
-    public void onClick(View v) {
-        /*EditText input = (EditText)findViewById(R.id.repo_input);
-        String repoName = input.getText().toString();
-
-        String url = "https://api.github.com/search/repositories?q=" + repoName + "+in:name";
-        new RestClient().execute(url);
-
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
-        */
     }
 
     @Override
@@ -126,66 +108,5 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         return super.onOptionsItemSelected(item);
     }
-
-    /*
-    private class RestClient extends AsyncTask<String, String, String> {
-
-        @Override
-        protected String doInBackground(String... uri) {
-            HttpClient httpclient = new DefaultHttpClient();
-            HttpResponse response;
-            String responseString;
-
-            try {
-                response = httpclient.execute(new HttpGet(uri[0]));
-                StatusLine statusLine = response.getStatusLine();
-
-                if(statusLine.getStatusCode() == HttpStatus.SC_OK){
-                    ByteArrayOutputStream out = new ByteArrayOutputStream();
-                    response.getEntity().writeTo(out);
-
-                    responseString = out.toString();
-
-                    out.close();
-                } else{
-                    //Closes the connection.
-                    response.getEntity().getContent().close();
-                    throw new IOException(statusLine.getReasonPhrase());
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                responseString = e.getMessage();
-            }
-
-            return responseString;
-        }
-
-        protected void onPostExecute(String result) {
-            TextView text = (TextView)findViewById(R.id.repo_text);
-
-            try {
-                String parsedString = "";
-                JSONObject jResult = new JSONObject(result);
-                JSONArray jArray = jResult.getJSONArray("items");
-
-                for (int i=0; i< jArray.length(); i++) {
-                    JSONObject jObject = jArray.getJSONObject(i);
-                    parsedString = parsedString + System.getProperty("line.separator") + jObject.getInt("id") + ": " + jObject.getString("full_name");
-                }
-
-                text.setText(parsedString);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-                text.setText(e.getMessage());
-            }
-
-            super.onPostExecute(result);
-        }
-    }
-*/
-
-
 
 }
