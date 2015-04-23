@@ -81,6 +81,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             case 1:
                 fragment = PlanningPokerFragment.newInstance(2);
                 break;
+            case 2:
+                fragment=RepositorySearchFragment.newInstance(3);
+                break;
         }
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)
@@ -95,6 +98,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             case 2:
                 mTitle = getString(R.string.drawer_item_planning_poker);
                 break;
+            case 3:
+                mTitle = getString(R.string.drawer_item_repository_search);
+                break;
+
         }
     }
 
