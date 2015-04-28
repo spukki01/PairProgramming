@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import se.chalmers.eda397.pairprogramming.model.Branch;
 import se.chalmers.eda397.pairprogramming.model.Repository;
 import se.chalmers.eda397.pairprogramming.util.IMapper;
 import se.chalmers.eda397.pairprogramming.util.RepositoryMapper;
@@ -42,5 +43,10 @@ public class GitHubClient implements IGitHubClient {
         }
 
         return list;
+    }
+
+    @Override
+    public List<Branch> findRelatedBranches(int repositoryId) {
+        return null;
     }
 }
