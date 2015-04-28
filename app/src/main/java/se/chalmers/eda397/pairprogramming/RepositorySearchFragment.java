@@ -14,18 +14,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.StatusLine;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.util.List;
+
+import se.chalmers.eda397.pairprogramming.model.Repository;
+import se.chalmers.eda397.pairprogramming.core.ConnectionManager;
+import se.chalmers.eda397.pairprogramming.core.GitHubClient;
+import se.chalmers.eda397.pairprogramming.core.IGitHubClient;
 
 
 public class RepositorySearchFragment extends Fragment implements View.OnClickListener{
@@ -73,67 +71,34 @@ public class RepositorySearchFragment extends Fragment implements View.OnClickLi
         EditText input = (EditText)mRootView.findViewById(R.id.repo_input);
         String repoName = input.getText().toString();
 
-        String url = "https://api.github.com/search/repositories?q=" + repoName + "+in:name";
-        new RestClient().execute(url);
+        new RestClient().execute(repoName);
 
         InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
     }
 
 
-    private class RestClient extends AsyncTask<String, String, String> {
+    private class RestClient extends AsyncTask<String, List<Repository>, List<Repository>> {
 
-        @Override
-        protected String doInBackground(String... uri) {
-            HttpClient httpclient = new DefaultHttpClient();
-            HttpResponse response;
-            String responseString;
+        private IGitHubClient mGitHubClient;
 
-            try {
-                response = httpclient.execute(new HttpGet(uri[0]));
-                StatusLine statusLine = response.getStatusLine();
-
-                if(statusLine.getStatusCode() == HttpStatus.SC_OK){
-                    ByteArrayOutputStream out = new ByteArrayOutputStream();
-                    response.getEntity().writeTo(out);
-
-                    responseString = out.toString();
-
-                    out.close();
-                } else{
-                    //Closes the connection.
-                    response.getEntity().getContent().close();
-                    throw new IOException(statusLine.getReasonPhrase());
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                responseString = e.getMessage();
-            }
-
-            return responseString;
+        private RestClient () {
+            mGitHubClient = new GitHubClient(new ConnectionManager());
         }
 
-        protected void onPostExecute(String result) {
-            TextView text = (TextView)mRootView.findViewById(R.id.repo_text);
 
-            try {
-                String parsedString = "";
-                JSONObject jResult = new JSONObject(result);
-                JSONArray jArray = jResult.getJSONArray("items");
+        @Override
+        protected List<Repository> doInBackground(String... repoName) {
+            //TODO We only use the first repo-name for findRepository().
+            return this.mGitHubClient.findRepositories(repoName[0]);
+        }
 
-                for (int i=0; i< jArray.length(); i++) {
-                    JSONObject jObject = jArray.getJSONObject(i);
-                    parsedString = parsedString + System.getProperty("line.separator") + jObject.getInt("id") + ": " + jObject.getString("full_name");
-                }
+        protected void onPostExecute(List<Repository> result) {
+            if (result.size()>0) {
+                TextView text = (TextView) mRootView.findViewById(R.id.repo_text);
 
-                text.setText(parsedString);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-                text.setText(e.getMessage());
+                text.setText("name: " + result.get(0).getName() + " Id: " + result.get(0).getId());
             }
-
             super.onPostExecute(result);
         }
     }
