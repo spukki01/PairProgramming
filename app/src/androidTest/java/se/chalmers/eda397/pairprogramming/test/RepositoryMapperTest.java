@@ -21,11 +21,14 @@ public class RepositoryMapperTest extends TestCase {
     }
 
     public void testMap() throws Exception {
-        String jsonString = "";
+        String jsonString = "{ id:123, private:false, description:something, name:PairProgramming }";
         JSONObject json = new JSONObject(jsonString);
 
         Repository repo = this.mMapper.map(json);
 
-        assertEquals("123", repo.getId());
+        assertEquals(123, repo.getId());
+        assertEquals(false, repo.isPrivate());
+        assertEquals("something", repo.getDescription());
+        assertEquals("PairProgramming", repo.getName());
     }
 }
