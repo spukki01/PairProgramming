@@ -1,4 +1,4 @@
-package se.chalmers.eda397.pairprogramming.util;
+package se.chalmers.eda397.pairprogramming.core;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -13,12 +13,13 @@ import java.io.IOException;
 public class ConnectionManager implements IConnectionManager {
 
     @Override
-    public String executeStatement(String url) {
+    public String executeQuery(String url) {
         HttpClient httpclient = new DefaultHttpClient();
         HttpResponse response;
         String responseString;
 
         try {
+            //TODO "HttpGet() should be generic.
             response = httpclient.execute(new HttpGet(url));
             StatusLine statusLine = response.getStatusLine();
 

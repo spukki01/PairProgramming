@@ -13,23 +13,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.StatusLine;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.util.List;
 
 import se.chalmers.eda397.pairprogramming.model.Repository;
-import se.chalmers.eda397.pairprogramming.util.ConnectionManager;
-import se.chalmers.eda397.pairprogramming.util.GitHubClient;
-import se.chalmers.eda397.pairprogramming.util.IGitHubClient;
+import se.chalmers.eda397.pairprogramming.core.ConnectionManager;
+import se.chalmers.eda397.pairprogramming.core.GitHubClient;
+import se.chalmers.eda397.pairprogramming.core.IGitHubClient;
 
 
 public class RepositorySearchFragment extends Fragment implements View.OnClickListener{
@@ -84,7 +77,7 @@ public class RepositorySearchFragment extends Fragment implements View.OnClickLi
     }
 
 
-    private class RestClient extends AsyncTask<String, Repository, Repository> {
+    private class RestClient extends AsyncTask<String, List<Repository>, List<Repository>> {
 
         private IGitHubClient mGitHubClient;
 
@@ -94,31 +87,17 @@ public class RepositorySearchFragment extends Fragment implements View.OnClickLi
 
 
         @Override
-        protected Repository doInBackground(String... repoName) {
-            Repository repo = this.mGitHubClient.findRepository(repoName[0]);
-            return repo;
+        protected List<Repository> doInBackground(String... repoName) {
+            //TODO We only use the first repo-name for findRepository().
+            return this.mGitHubClient.findRepositories(repoName[0]);
         }
 
-        protected void onPostExecute(Repository result) {
-            TextView text = (TextView)mRootView.findViewById(R.id.repo_text);
+        protected void onPostExecute(List<Repository> result) {
+            if (result.size()>0) {
+                TextView text = (TextView) mRootView.findViewById(R.id.repo_text);
 
-            try {
-                String parsedString = "";
-                JSONObject jResult = new JSONObject("");//result);
-                JSONArray jArray = jResult.getJSONArray("items");
-
-                for (int i=0; i< jArray.length(); i++) {
-                    JSONObject jObject = jArray.getJSONObject(i);
-                    parsedString = parsedString + System.getProperty("line.separator") + jObject.getInt("id") + ": " + jObject.getString("full_name");
-                }
-
-                text.setText(parsedString);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-                text.setText(e.getMessage());
+                text.setText("name: " + result.get(0).getName() + " Id: " + result.get(0).getId());
             }
-
             super.onPostExecute(result);
         }
     }
