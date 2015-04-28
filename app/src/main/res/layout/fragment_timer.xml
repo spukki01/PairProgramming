@@ -4,15 +4,14 @@
     tools:context="se.chalmers.eda397.pairprogramming.TimerFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <TextView android:layout_width="match_parent" android:layout_height="match_parent" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="time"
         android:ems="10"
-        android:id="@+id/editText"
+        android:id="@+id/timer_input"
         android:layout_gravity="center"
         android:autoText="false"
         android:hint="Enter time" />
@@ -20,8 +19,8 @@
     <Button
         android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:text="Start"
-        android:id="@+id/Starttimer"
+        android:text="start"
+        android:id="@+id/start_button"
         android:layout_gravity="center_horizontal|bottom" />
 
     <TextView
@@ -31,20 +30,34 @@
         android:text="Timer"
         android:id="@+id/textView"
         android:layout_gravity="center_horizontal|top"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:autoText="false"
+        android:elegantTextHeight="false"
+        android:textStyle="bold|italic"
+        android:textSize="48dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Stop"
-        android:id="@+id/button"
+        android:text="stop"
+        android:id="@+id/stop_button"
         android:layout_gravity="left|bottom" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pause"
-        android:id="@+id/button2"
+        android:text="pause"
+        android:id="@+id/pause_button"
         android:layout_gravity="right|bottom" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="0"
+        android:id="@+id/timer_output"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:singleLine="true" />
 
 </FrameLayout>
