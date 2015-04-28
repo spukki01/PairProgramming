@@ -26,6 +26,11 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import se.chalmers.eda397.pairprogramming.model.Repository;
+import se.chalmers.eda397.pairprogramming.util.ConnectionManager;
+import se.chalmers.eda397.pairprogramming.util.GitHubClient;
+import se.chalmers.eda397.pairprogramming.util.IGitHubClient;
+
 
 public class RepositorySearchFragment extends Fragment implements View.OnClickListener{
     /**
@@ -72,53 +77,34 @@ public class RepositorySearchFragment extends Fragment implements View.OnClickLi
         EditText input = (EditText)mRootView.findViewById(R.id.repo_input);
         String repoName = input.getText().toString();
 
-        String url = "https://api.github.com/search/repositories?q=" + repoName + "+in:name";
-        new RestClient().execute(url);
+        new RestClient().execute(repoName);
 
         InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
     }
 
 
-    private class RestClient extends AsyncTask<String, String, String> {
+    private class RestClient extends AsyncTask<String, Repository, Repository> {
 
-        @Override
-        protected String doInBackground(String... uri) {
-            HttpClient httpclient = new DefaultHttpClient();
-            HttpResponse response;
-            String responseString;
+        private IGitHubClient mGitHubClient;
 
-            try {
-                response = httpclient.execute(new HttpGet(uri[0]));
-                StatusLine statusLine = response.getStatusLine();
-
-                if(statusLine.getStatusCode() == HttpStatus.SC_OK){
-                    ByteArrayOutputStream out = new ByteArrayOutputStream();
-                    response.getEntity().writeTo(out);
-
-                    responseString = out.toString();
-
-                    out.close();
-                } else{
-                    //Closes the connection.
-                    response.getEntity().getContent().close();
-                    throw new IOException(statusLine.getReasonPhrase());
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                responseString = e.getMessage();
-            }
-
-            return responseString;
+        private RestClient () {
+            mGitHubClient = new GitHubClient(new ConnectionManager());
         }
 
-        protected void onPostExecute(String result) {
+
+        @Override
+        protected Repository doInBackground(String... repoName) {
+            Repository repo = this.mGitHubClient.findRepository(repoName[0]);
+            return repo;
+        }
+
+        protected void onPostExecute(Repository result) {
             TextView text = (TextView)mRootView.findViewById(R.id.repo_text);
 
             try {
                 String parsedString = "";
-                JSONObject jResult = new JSONObject(result);
+                JSONObject jResult = new JSONObject("");//result);
                 JSONArray jArray = jResult.getJSONArray("items");
 
                 for (int i=0; i< jArray.length(); i++) {
