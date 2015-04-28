@@ -15,7 +15,7 @@
         android:id="@+id/timer_input"
         android:layout_gravity="center"
         android:autoText="false"
-        android:hint="Enter time" />
+        android:hint="hh:mm:ss" />
 
     <Button
         android:layout_width="120dp"
@@ -58,7 +58,7 @@
         android:text="0"
         android:id="@+id/timer_output"
         android:layout_gravity="center"
-        android:visibility="gone"
+        android:visibility="visible"
         android:singleLine="true" />
 
 </FrameLayout>

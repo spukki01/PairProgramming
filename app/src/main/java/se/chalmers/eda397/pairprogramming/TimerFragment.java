@@ -27,6 +27,7 @@ import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.sql.Time;
 import java.util.Timer;
 
 
@@ -77,8 +78,32 @@ public class TimerFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         EditText input = (EditText)mRootView.findViewById(R.id.timer_input);
-        int time = Integer.parseInt(input.getText().toString());
+        String inputStr = input.getText().toString();
         TextView output = (TextView)mRootView.findViewById(R.id.timer_output);
+        int min= 0, hr = 0, sec = 0;
+        if(inputStr.lastIndexOf(":")>=0){
+            sec = Integer.parseInt(inputStr.substring(inputStr.lastIndexOf(":")+1, inputStr.length()));
+            inputStr = inputStr.substring(0,inputStr.lastIndexOf(":"));
+            if(inputStr.lastIndexOf(":")>=0){
+                min = Integer.parseInt(inputStr.substring(inputStr.lastIndexOf(":")+1, inputStr.length()));
+                inputStr = inputStr.substring(0,inputStr.lastIndexOf(":"));
+                if(inputStr.lastIndexOf(":")>=0) {
+                    hr = Integer.parseInt(inputStr.substring(inputStr.lastIndexOf(":")+1, inputStr.length()));
+                }
+                else {
+                    hr = Integer.parseInt(inputStr);
+                }
+            }
+            else {
+                min = Integer.parseInt(inputStr);
+            }
+        }
+        else {
+            sec = Integer.parseInt(inputStr);
+        }
+
+        int time = (hr * 60*60) + (min * 60) + sec;
+
         if(v.getId() == R.id.start_button) {
             startTimer(time);
         }
