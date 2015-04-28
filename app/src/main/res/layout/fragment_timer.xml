@@ -1,0 +1,50 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="se.chalmers.eda397.pairprogramming.TimerFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView android:layout_width="match_parent" android:layout_height="match_parent"
+        android:text="@string/hello_blank_fragment" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="time"
+        android:ems="10"
+        android:id="@+id/editText"
+        android:layout_gravity="center"
+        android:autoText="false"
+        android:hint="Enter time" />
+
+    <Button
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:text="Start"
+        android:id="@+id/Starttimer"
+        android:layout_gravity="center_horizontal|bottom" />
+
+    <TextView
+        android:layout_width="165dp"
+        android:layout_height="62dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Timer"
+        android:id="@+id/textView"
+        android:layout_gravity="center_horizontal|top"
+        android:textAlignment="center" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stop"
+        android:id="@+id/button"
+        android:layout_gravity="left|bottom" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pause"
+        android:id="@+id/button2"
+        android:layout_gravity="right|bottom" />
+
+</FrameLayout>
