@@ -91,14 +91,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener{
         //else if(v.getId() == R.id.resume_button) {
             //resumeTimer();
         //}
-        /*if(((Button)v).getText()=="start_timer") {
-            startTimer(time);
-        }
-        else if(((Button)v).getText()=="stop") {
 
-        } if(((Button)v).getText()=="pause") {
-
-        }*/
     }
 
     public void startTimer(int time)
@@ -108,20 +101,18 @@ public class TimerFragment extends Fragment implements View.OnClickListener{
         mRootView.findViewById(R.id.start_button).setVisibility(View.GONE);
         final TextView output = (TextView)mRootView.findViewById(R.id.timer_output);
         cdtimer = new CountDownTimer((time*1000), 1000) {
-            int hr;
-            int min;
-            int sec;
-            public void onTick(long millisUntilFinished) {
-                /*h = x / (60*60*1000)
-                x = x - h*(60*60*1000)
-                m = x / (60*1000)
-                x = x - m*(60*1000)
-                s = x / 1000
-                x = x - s*1000*/
-                hr = (int)(millisUntilFinished);
-                millisUntilFinished = ((millisUntilFinished/1000)/60)/60;
-
-                output.setText(hr+":" + min+":"+sec);
+            int h;
+            int m;
+            int s;
+            public void onTick(long x) {
+                h = (int)(x / (60*60*1000));
+                x = (x - h*(60*60*1000));
+                m = (int)(x / (60*1000));
+                x = (x - m*(60*1000));
+                s = (int)(x / 1000);
+                x = (x - s*1000);
+                String outputString = String.format("%02d:%02d:%02d", h,m,s);
+                output.setText(outputString);
             }
 
             public void onFinish() {
