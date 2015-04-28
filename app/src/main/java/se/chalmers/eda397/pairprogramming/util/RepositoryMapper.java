@@ -10,10 +10,12 @@ public class RepositoryMapper implements IMapper{
     @Override
     public Repository map(JSONObject jsonObject) throws JSONException {
         Repository repo = new Repository();
-        repo.setDescription(jsonObject.getString("description"));
+
         repo.setId(jsonObject.getInt("id"));
         repo.setName(jsonObject.getString("name"));
+        repo.setDescription(jsonObject.getString("description"));
         repo.setPrivate(jsonObject.getBoolean("private"));
+
         return repo;
     }
 }

@@ -13,11 +13,11 @@ import se.chalmers.eda397.pairprogramming.util.RepositoryMapper;
 
 public class GitHubClient implements IGitHubClient {
 
-    private IConnectionManager mConnnectionManager;
+    private IConnectionManager mConnectionManager;
     private IMapper<Repository> mMapper;
 
-    public GitHubClient(IConnectionManager mConnnectionManager) {
-        this.mConnnectionManager = mConnnectionManager;
+    public GitHubClient(IConnectionManager connectionManager) {
+        this.mConnectionManager = connectionManager;
         this.mMapper = new RepositoryMapper();
     }
 
@@ -26,8 +26,8 @@ public class GitHubClient implements IGitHubClient {
     public List<Repository> findRepositories(String repoName) {
         String url = "https://api.github.com/search/repositories?q=" + repoName + "+in:name";
 
-        String response = this.mConnnectionManager.executeQuery(url);
-        List<Repository> list = new ArrayList<Repository>();
+        String response = this.mConnectionManager.executeQuery(url);
+        List<Repository> list = new ArrayList<>();
         try {
             JSONObject jResult = new JSONObject(response);
             JSONArray jArray = jResult.getJSONArray("items");

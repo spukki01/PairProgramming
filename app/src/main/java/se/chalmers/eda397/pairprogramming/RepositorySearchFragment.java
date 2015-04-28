@@ -70,32 +70,29 @@ public class RepositorySearchFragment extends Fragment implements View.OnClickLi
         EditText input = (EditText)mRootView.findViewById(R.id.repo_input);
         String repoName = input.getText().toString();
 
-        new RestClient().execute(repoName);
+        new RepositoryTask().execute(repoName);
 
         InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
     }
 
 
-    private class RestClient extends AsyncTask<String, List<Repository>, List<Repository>> {
+    private class RepositoryTask extends AsyncTask<String, List<Repository>, List<Repository>> {
 
         private IGitHubClient mGitHubClient;
-
-        private RestClient () {
+        private RepositoryTask () {
             mGitHubClient = new GitHubClient(new ConnectionManager());
         }
 
-
         @Override
         protected List<Repository> doInBackground(String... repoName) {
-            //TODO We only use the first repo-name for findRepository().
             return this.mGitHubClient.findRepositories(repoName[0]);
         }
 
+        @Override
         protected void onPostExecute(List<Repository> result) {
             if (result.size()>0) {
                 TextView text = (TextView) mRootView.findViewById(R.id.repo_text);
-
                 text.setText("name: " + result.get(0).getName() + " Id: " + result.get(0).getId());
             }
             super.onPostExecute(result);
