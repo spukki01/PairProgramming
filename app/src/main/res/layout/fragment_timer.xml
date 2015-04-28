@@ -61,4 +61,12 @@
         android:visibility="visible"
         android:singleLine="true" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Resume"
+        android:id="@+id/resume_button"
+        android:layout_gravity="right|bottom"
+        android:visibility="gone" />
+
 </FrameLayout>

@@ -40,6 +40,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener{
 
     private View mRootView = null;
     private CountDownTimer cdtimer;
+    private long PauseTime;
     /**
      * Returns a new instance of this fragment for the given section
      * number.
@@ -111,11 +112,11 @@ public class TimerFragment extends Fragment implements View.OnClickListener{
             stopTimer();
         }
         else if(v.getId() == R.id.pause_button) {
-            //pauseTimer();
+            pauseTimer();
         }
-        //else if(v.getId() == R.id.resume_button) {
-            //resumeTimer();
-        //}
+        else if(v.getId() == R.id.resume_button) {
+            resumeTimer();
+        }
 
     }
 
@@ -130,6 +131,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener{
             int m;
             int s;
             public void onTick(long x) {
+                PauseTime = x;
                 h = (int)(x / (60*60*1000));
                 x = (x - h*(60*60*1000));
                 m = (int)(x / (60*1000));
@@ -160,10 +162,48 @@ public class TimerFragment extends Fragment implements View.OnClickListener{
 
     public void pauseTimer()
     {
-        //cdtimer.
+       cdtimer.cancel();
+        mRootView.findViewById(R.id.pause_button).setVisibility(View.GONE);
+        mRootView.findViewById(R.id.resume_button).setVisibility(View.VISIBLE);
+
+
     }
 
-    private class RestClient extends AsyncTask<String, String, String> {
+    public void resumeTimer()
+
+    {
+        final TextView output = (TextView)mRootView.findViewById(R.id.timer_output);
+        mRootView.findViewById(R.id.pause_button).setVisibility(View.VISIBLE);
+        mRootView.findViewById(R.id.resume_button).setVisibility(View.GONE);
+
+        cdtimer = new CountDownTimer(PauseTime,1000) {
+            int h;
+            int m;
+            int s;
+            public void onTick(long x) {
+                PauseTime = x;
+                h = (int)(x / (60*60*1000));
+                x = (x - h*(60*60*1000));
+                m = (int)(x / (60*1000));
+                x = (x - m*(60*1000));
+                s = (int)(x / 1000);
+                x = (x - s*1000);
+                String outputString = String.format("%02d:%02d:%02d", h,m,s);
+                output.setText(outputString);
+
+            }
+
+            public void onFinish() {
+                output.setText("Done!");
+                mRootView.findViewById(R.id.timer_output).setVisibility(View.GONE);
+                mRootView.findViewById(R.id.timer_input).setVisibility(View.VISIBLE);
+                mRootView.findViewById(R.id.start_button).setVisibility(View.VISIBLE);
+
+            }
+        }.start();
+    }
+
+       private class RestClient extends AsyncTask<String, String, String> {
 
         @Override
         protected String doInBackground(String... uri) {
