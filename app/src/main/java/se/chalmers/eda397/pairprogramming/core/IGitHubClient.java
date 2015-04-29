@@ -8,5 +8,5 @@ import se.chalmers.eda397.pairprogramming.model.Repository;
 public interface IGitHubClient {
 
     List<Repository> findRepositories(String repoName);
-    List<Branch> findRelatedBranches(int repositoryId);
+    List<Branch> findRelatedBranches(String repoName, String repoOwner);
 }
