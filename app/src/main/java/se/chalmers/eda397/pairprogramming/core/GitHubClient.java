@@ -69,7 +69,7 @@ public class GitHubClient implements IGitHubClient {
                 JSONArray jBranches = new JSONArray(branchResponse);
 
                 for (int i=0; i< jBranches.length(); i++) {
-                    JSONObject jObject = jArray.getJSONObject(i);
+                    JSONObject jObject = jBranches.getJSONObject(i);
                     list.add(mBranchMapper.map(jObject));
                 }
 
