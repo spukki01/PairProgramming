@@ -95,13 +95,7 @@ public class BranchFragment extends Fragment {
         protected void onPostExecute(List<Branch> result) {
             if (result.size() > 0) {
                 ListView lw = (ListView)mRootView.findViewById(R.id.list_branches);
-
-                //TODO: remove and add custom ArrayAdapter
-                List<String> temp = new ArrayList<>();
-                for (int i = 0; i < result.size(); i++)
-                    temp.add(result.get(i).getName());
-
-                lw.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, temp));
+                lw.setAdapter(new BranchAdapter(getActivity(), result));
             }
 
             mProgressDialog.dismiss();
