@@ -63,9 +63,11 @@ public class TimerFragment extends Fragment implements View.OnClickListener{
         final Button startButton = (Button) mRootView.findViewById(R.id.start_button);
         final Button stopButton = (Button) mRootView.findViewById(R.id.stop_button);
         final Button pauseButton = (Button) mRootView.findViewById(R.id.pause_button);
+        final Button resumeButton = (Button) mRootView.findViewById(R.id.resume_button);
         startButton.setOnClickListener(this);
         stopButton.setOnClickListener(this);
         pauseButton.setOnClickListener(this);
+        resumeButton.setOnClickListener(this);
 
         return mRootView;
     }
@@ -105,6 +107,11 @@ public class TimerFragment extends Fragment implements View.OnClickListener{
 
         int time = (hr * 60*60) + (min * 60) + sec;
 
+        /**if (time > 216000){
+            System.out.println("Error: Should not exceed 216000 seconds");
+             return null ;
+        }*/
+
         if(v.getId() == R.id.start_button) {
             startTimer(time);
         }
@@ -130,7 +137,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener{
             int h;
             int m;
             int s;
-            public void onTick(long x) {
+            public void onTick(long x){
                 PauseTime = x;
                 h = (int)(x / (60*60*1000));
                 x = (x - h*(60*60*1000));
@@ -138,6 +145,9 @@ public class TimerFragment extends Fragment implements View.OnClickListener{
                 x = (x - m*(60*1000));
                 s = (int)(x / 1000);
                 x = (x - s*1000);
+                /**if (h > 24 || m > 60 || s > 60 ) {
+                    throw new Exception("Bad input please enter correct time with : separator");
+                }**/
                 String outputString = String.format("%02d:%02d:%02d", h,m,s);
                 output.setText(outputString);
             }

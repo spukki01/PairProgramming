@@ -5,7 +5,8 @@
 
     <!-- TODO: Update blank fragment layout -->
     <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:text="00:00:00" />
+        android:text="00:00:00"
+        android:id= "@+id/R" />
 
     <EditText
         android:layout_width="wrap_content"
