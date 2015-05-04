@@ -111,12 +111,9 @@ public class RepositorySearchFragment extends ListFragment implements View.OnCli
 
                 mAdapter.clear();
                 mRepoListItems.clear();
-                String listString;
 
                 for (Repository r : result) {
-
-                    listString = r.getId() + " " + r.getName();
-                    mRepoListItems.add(new RepoListItem(listString));
+                    mRepoListItems.add(new RepoListItem(r));
                 }
                 mAdapter.addAll(mRepoListItems);
                 mAdapter.notifyDataSetChanged();

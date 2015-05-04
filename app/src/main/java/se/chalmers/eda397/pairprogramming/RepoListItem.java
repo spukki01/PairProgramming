@@ -1,22 +1,24 @@
 package se.chalmers.eda397.pairprogramming;
 
+import se.chalmers.eda397.pairprogramming.model.Repository;
+
 /**
  * Created by marcusisaksson on 15-04-28.
  */
 public class RepoListItem {
 
-    private String itemTitle;
+    private Repository mRepository;
 
-    public RepoListItem(String title){
-        this.itemTitle = title;
+    public RepoListItem(Repository repository){
+        this.mRepository = repository;
     }
 
-    public String getItemTitle() {
-        return itemTitle;
+    public Repository getRepository() {
+        return mRepository;
     }
 
-    public void setItemTitle(String itemTitle) {
-        this.itemTitle = itemTitle;
+    public void setRepository(Repository repository) {
+        this.mRepository = repository;
     }
 
 
