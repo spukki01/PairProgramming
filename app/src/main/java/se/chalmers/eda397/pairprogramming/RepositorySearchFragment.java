@@ -1,18 +1,21 @@
 package se.chalmers.eda397.pairprogramming;
 
 import android.app.Activity;
-import android.app.ListFragment;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -26,9 +29,11 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
-public class RepositorySearchFragment extends Fragment implements View.OnClickListener{
+public class RepositorySearchFragment extends ListFragment implements View.OnClickListener{
     /**
      * The fragment argument representing the section number for this
      * fragment.
@@ -36,6 +41,10 @@ public class RepositorySearchFragment extends Fragment implements View.OnClickLi
     private static final String ARG_SECTION_NUMBER = "section_number";
 
     private View mRootView = null;
+
+    ArrayAdapter<RepoListItem> mAdapter;
+
+    private List<RepoListItem> mRepoListItems = new ArrayList();
 
     /**
      * Returns a new instance of this fragment for the given section
@@ -52,12 +61,23 @@ public class RepositorySearchFragment extends Fragment implements View.OnClickLi
     public RepositorySearchFragment () {
     }
 
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
          mRootView = inflater.inflate(R.layout.fragment_repository_search, container, false);
 
         final Button button = (Button) mRootView.findViewById(R.id.repo_search_button);
         button.setOnClickListener(this);
+
+        mAdapter = new RepoListAdapter(
+                inflater.getContext(), mRepoListItems);
+        this.setListAdapter(mAdapter);
+
 
         return mRootView;
     }
@@ -80,6 +100,9 @@ public class RepositorySearchFragment extends Fragment implements View.OnClickLi
         imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
     }
 
+    public void addRepoOnClick(View v){
+
+    }
 
     private class RestClient extends AsyncTask<String, String, String> {
 
@@ -118,21 +141,27 @@ public class RepositorySearchFragment extends Fragment implements View.OnClickLi
             TextView text = (TextView)mRootView.findViewById(R.id.repo_text);
 
             try {
-                String parsedString = "";
                 JSONObject jResult = new JSONObject(result);
                 JSONArray jArray = jResult.getJSONArray("items");
+                String listString;
 
-                for (int i=0; i< jArray.length(); i++) {
+                mAdapter.clear();
+                mRepoListItems.clear();
+                for (int i=0; i < jArray.length(); i++) {
                     JSONObject jObject = jArray.getJSONObject(i);
-                    parsedString = parsedString + System.getProperty("line.separator") + jObject.getInt("id") + ": " + jObject.getString("full_name");
-                }
 
-                text.setText(parsedString);
+                    listString = System.getProperty("line.separator") + jObject.getInt("id") + ": " + jObject.getString("full_name");
+                    mRepoListItems.add(new RepoListItem(listString));
+                }
+                mAdapter.addAll(mRepoListItems);
+                mAdapter.notifyDataSetChanged();
 
             } catch (JSONException e) {
                 e.printStackTrace();
                 text.setText(e.getMessage());
             }
+
+
 
             super.onPostExecute(result);
         }
