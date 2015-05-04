@@ -9,6 +9,7 @@
     <string name="drawer_item_planning_poker">Planning poker</string>
     <string name="drawer_item_repository_search">Repository search</string>
     <string name="drawer_item_timer">Timer</string>
+    <string name="drawer_item_removerepository_favorites">RemoveRepository</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

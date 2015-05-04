@@ -69,6 +69,9 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
             case 3:
                 fragment=TimerFragment.newInstance(4);
                 break;
+            case 4:
+                fragment=RemoveRepositoryFavoritesFragment.newInstance(5);
+                break;
         }
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)
@@ -88,6 +91,9 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                 break;
             case 4:
                 mTitle = getString(R.string.drawer_item_timer);
+                break;
+            case 5:
+                mTitle = getString(R.string.drawer_item_removerepository_favorites);
                 break;
 
         }
