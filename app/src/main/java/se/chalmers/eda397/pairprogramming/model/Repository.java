@@ -6,6 +6,7 @@ public class Repository {
     private String name;
     private boolean isPrivate;
     private String description;
+    private String owner;
 
 
     public int getId() {
@@ -40,5 +41,12 @@ public class Repository {
         this.description = description;
     }
 
+    public String getOwner() {
+        return this.owner;
+    }
+
+    public void setOwner(String owner){
+        this.owner = owner;
+    }
 
 }

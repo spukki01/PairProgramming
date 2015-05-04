@@ -2,6 +2,7 @@ package se.chalmers.eda397.pairprogramming;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
+
+import se.chalmers.eda397.pairprogramming.util.RepositoryStorage;
 
 /**
  * Created by marcusisaksson on 15-04-28.
@@ -41,7 +44,7 @@ public class RepoListAdapter extends ArrayAdapter {
      */
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
-        RepoListItem item = (RepoListItem)getItem(position);
+        final RepoListItem item = (RepoListItem)getItem(position);
         View viewToUse = null;
 
         // This block exists to inflate the settings list item conditionally based on whether
@@ -67,7 +70,7 @@ public class RepoListAdapter extends ArrayAdapter {
                 + " id: " + item.getRepository().getId());
 
         TextView textContent = (TextView)viewToUse.findViewById(R.id.repoNameText);
-        final String text = textContent.getText().toString();
+        //final String text = textContent.getText().toString();
 
         //Handle buttons and add onClickListeners
         Button addRepoButton = (Button)viewToUse.findViewById(R.id.addRepoButton);
@@ -75,8 +78,13 @@ public class RepoListAdapter extends ArrayAdapter {
         addRepoButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                //TODO Change the text of this Toast.
+                RepositoryStorage.getInstance().store(item.getRepository(), context);
+                String text;
+                text = RepositoryStorage.getInstance().fetch(context).getName() + RepositoryStorage.getInstance().fetch(context).getOwner() + " is Stored";
                 Toast addRepoClickToast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
                 addRepoClickToast.show();
+
             }
         });
 

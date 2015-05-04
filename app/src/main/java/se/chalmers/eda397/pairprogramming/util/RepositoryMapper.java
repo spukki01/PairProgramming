@@ -15,6 +15,7 @@ public class RepositoryMapper implements IMapper{
         repo.setName(jsonObject.getString("name"));
         repo.setDescription(jsonObject.getString("description"));
         repo.setPrivate(jsonObject.getBoolean("private"));
+        repo.setOwner(jsonObject.getJSONObject("owner").getString("login"));
 
         return repo;
     }
