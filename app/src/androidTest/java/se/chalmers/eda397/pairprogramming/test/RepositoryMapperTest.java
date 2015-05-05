@@ -21,7 +21,7 @@ public class RepositoryMapperTest extends TestCase {
     }
 
     public void testMap() throws Exception {
-        String jsonString = "{ id:123, private:false, description:something, name:PairProgramming }";
+        String jsonString = "{ id:123, private:false, description:something, name:PairProgramming, owner: {login:apa} }";
         JSONObject json = new JSONObject(jsonString);
 
         Repository repo = this.mMapper.map(json);
@@ -30,5 +30,6 @@ public class RepositoryMapperTest extends TestCase {
         assertEquals(false, repo.isPrivate());
         assertEquals("something", repo.getDescription());
         assertEquals("PairProgramming", repo.getName());
+        assertEquals("apa", repo.getOwnerName());
     }
 }

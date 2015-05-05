@@ -64,7 +64,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                 fragment = PlanningPokerFragment.newInstance(2);
                 break;
             case 2:
-                fragment=RepositorySearchFragment.newInstance(3);
+                fragment = RepositorySearchFragment.newInstance(3);
                 break;
         }
         fragmentManager.beginTransaction()
