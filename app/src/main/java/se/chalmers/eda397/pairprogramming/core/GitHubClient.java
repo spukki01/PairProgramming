@@ -82,4 +82,21 @@ public class GitHubClient implements IGitHubClient {
         return list;
     }
 
+    @Override
+    public String getLatestCommitSHA(String repository, String owner, String branch) {
+        String commitSHA = "";
+
+        String find_repo_url = "https://api.github.com/repos/" + owner + "/" + repository + "/branches/" + branch;
+        String repoResponse = this.mConnectionManager.executeQuery(find_repo_url);
+
+        try {
+            JSONObject jResult = new JSONObject(repoResponse);
+            commitSHA = jResult.getJSONObject("commit").getString("sha");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return commitSHA;
+    }
+
 }
