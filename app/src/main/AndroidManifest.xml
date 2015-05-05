@@ -22,8 +22,8 @@
         </activity>
 
 
-        <receiver android:name=".CommitNotificationReceiver"/>
-
+        <receiver android:name=".CommitNotificationReceiver" android:process=":remote"></receiver>
+        <service android:name=".CommitNotificationService"></service>
 
     </application>
 
