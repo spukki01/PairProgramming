@@ -1,6 +1,7 @@
 package se.chalmers.eda397.pairprogramming.util;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,25 +39,29 @@ public class RepositoryStorage implements IStorage<Repository> {
 
     @Override
     public void store(Repository repository, Context context) throws JSONException {
-        JSONObject repo = new JSONObject();
-        repo.put("name", repository.getName());
-        repo.put("owner", repository.getOwner());
-        repo.put("id", repository.getId());
-        repo.put("isPrivate", repository.isPrivate());
-        repo.put("description", repository.getDescription());
-        mArray.put(repo);
-        mJsonObject.put("repositories", mArray);
+        JSONObject jsonObject;
+        JSONArray array;
         try {
-            File file = new File(FILENAME);
-            FileOutputStream fos = context.openFileOutput(FILENAME, Context.MODE_APPEND);
-            fos.write(mJsonObject.toString().getBytes());
+            jsonObject = readJsonFile(context.openFileInput(FILENAME));
+            array = jsonObject.getJSONArray("repositories");
+        } catch (FileNotFoundException e) {
+            jsonObject = new JSONObject();
+            array = new JSONArray();
+        }
+        try {
+
+
+            array.put(createJsonRepo(repository));
+
+            JSONObject newJsonObject = new JSONObject();
+            newJsonObject.put("repositories", array);
+
+            FileOutputStream fos = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
+            fos.write(newJsonObject.toString().getBytes());
             fos.close();
-        }
-        catch (FileNotFoundException e) {
+        } catch (Exception e) {
             //TODO Do something useful.
-        }
-        catch (IOException ioE) {
-            //TODO Do something useful.
+            e.printStackTrace();
         }
     }
 
@@ -65,14 +70,8 @@ public class RepositoryStorage implements IStorage<Repository> {
         List<Repository> list = new ArrayList<Repository>();
         try {
             FileInputStream fis = context.openFileInput(FILENAME);
-            int content;
-            String input = "";
-            while ((content = fis.read()) != -1) {
-                input += (char)content;
-            }
-            JSONObject jsonObject = new JSONObject(input);
-            //TODO REMOVE
-            System.out.println(input);
+            JSONObject jsonObject = readJsonFile(fis);
+
             JSONArray array = jsonObject.getJSONArray("repositories");
             for (int i = 0; i < array.length(); i++) {
                 Repository repo = new Repository();
@@ -86,7 +85,43 @@ public class RepositoryStorage implements IStorage<Repository> {
             }
         } catch (Exception e) {
             //TODO Do something useful.
+            e.printStackTrace();
         }
         return list;
     }
+
+    private JSONObject readJsonFile(FileInputStream fis){
+
+        try {
+            int content;
+            String input = "";
+
+            while ((content = fis.read()) != -1) {
+                input += (char)content;
+            }
+            return new JSONObject(input);
+        } catch (Exception e) {
+            //TODO Do something useful.
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private JSONObject createJsonRepo(Repository r){
+        try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("name", r.getName());
+            jsonObject.put("owner", r.getOwner());
+            jsonObject.put("id", r.getId());
+            jsonObject.put("isPrivate", r.isPrivate());
+            jsonObject.put("description", r.getDescription());
+            return jsonObject;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
+
 }

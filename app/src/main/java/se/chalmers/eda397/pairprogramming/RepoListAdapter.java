@@ -84,17 +84,17 @@ public class RepoListAdapter extends ArrayAdapter {
                     RepositoryStorage.getInstance().store(item.getRepository(), context);
                 }
                 catch (Exception e) {
-
+                    //TODO Do something useful.
+                    e.printStackTrace();
                 }
 
-                String text;
-                List<Repository> list = RepositoryStorage.getInstance().fetchAll(context);
+                /*List<Repository> list = RepositoryStorage.getInstance().fetchAll(context);
                 for (Repository r: list){
                     System.out.println(r.getName());
-                }
-                //text = RepositoryStorage.getInstance().fetchAll(context).getName() + RepositoryStorage.getInstance().fetch(context).getOwner() + " is Stored";
-                //Toast addRepoClickToast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
-                //addRepoClickToast.show();
+                }*/
+                String toastText = item.getRepository().getName() + " is stored";
+                Toast addRepoClickToast = Toast.makeText(context, toastText, Toast.LENGTH_SHORT);
+                addRepoClickToast.show();
 
             }
         });
