@@ -4,8 +4,10 @@ public class Repository {
 
     private int id;
     private String name;
+    private String ownerName;
     private boolean isPrivate;
     private String description;
+    private String branchesUrl;
 
 
     public int getId() {
@@ -24,6 +26,14 @@ public class Repository {
         this.name = name;
     }
 
+    public String getOwnerName() {
+        return this.ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
     public boolean isPrivate() {
         return this.isPrivate;
     }
@@ -39,6 +49,15 @@ public class Repository {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public String getBranchesUrl() {
+        return this.branchesUrl;
+    }
+
+    public void setBranchesUrl(String branchesUrl) {
+        this.branchesUrl = branchesUrl;
+    }
+
 
 
 }

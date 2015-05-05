@@ -51,7 +51,7 @@ public class RepositorySearchFragment extends Fragment implements View.OnClickLi
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-         mRootView = inflater.inflate(R.layout.fragment_repository_search, container, false);
+        mRootView = inflater.inflate(R.layout.fragment_repository_search, container, false);
 
         final Button button = (Button) mRootView.findViewById(R.id.repo_search_button);
         button.setOnClickListener(this);
