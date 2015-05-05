@@ -1,5 +1,7 @@
 package se.chalmers.eda397.pairprogramming;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -8,6 +10,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import se.chalmers.eda397.pairprogramming.service.CommitNotificationReceiver;
 
 public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
@@ -21,10 +25,15 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
      */
     private CharSequence mTitle;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        startService(new Intent(this, CommitNotificationReceiver.class));
+
         setContentView(R.layout.activity_main);
+
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
