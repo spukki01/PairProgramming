@@ -78,9 +78,10 @@ public class RepositoryStorage implements IStorage<Repository> {
                 JSONObject temp = array.getJSONObject(i);
                 repo.setId(temp.getInt("id"));
                 repo.setDescription(temp.getString("description"));
-                repo.setOwner(temp.getString("owner"));
+                repo.setOwnerName(temp.getString("owner"));
                 repo.setPrivate(temp.getBoolean("isPrivate"));
                 repo.setName(temp.getString("name"));
+                repo.setBranchesUrl(temp.getString("branchesURL"));
                 list.add(repo);
             }
         } catch (Exception e) {
@@ -111,10 +112,11 @@ public class RepositoryStorage implements IStorage<Repository> {
         try {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("name", r.getName());
-            jsonObject.put("owner", r.getOwner());
+            jsonObject.put("owner", r.getOwnerName());
             jsonObject.put("id", r.getId());
             jsonObject.put("isPrivate", r.isPrivate());
             jsonObject.put("description", r.getDescription());
+            jsonObject.put("branchesURL", r.getBranchesUrl());
             return jsonObject;
         } catch (Exception e) {
             e.printStackTrace();
