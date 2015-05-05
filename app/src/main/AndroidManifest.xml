@@ -21,7 +21,9 @@
             </intent-filter>
         </activity>
 
-        <receiver android:process=":remote" android:name="service.CommitNotificationReceiver"></receiver>
+
+        <receiver android:name=".CommitNotificationReceiver"/>
+
 
     </application>
 
