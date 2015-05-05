@@ -2,8 +2,12 @@ package se.chalmers.eda397.pairprogramming.util;
 
 import android.content.Context;
 
-public interface IStorage<T> {
-    void store(T t, Context context);
+import org.json.JSONException;
 
-    T fetch(Context context);
+import java.util.List;
+
+public interface IStorage<T> {
+    void store(T t, Context context) throws JSONException;
+
+    List<T> fetchAll(Context context);
 }

@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import se.chalmers.eda397.pairprogramming.model.Repository;
 import se.chalmers.eda397.pairprogramming.util.RepositoryStorage;
 
 /**
@@ -79,11 +80,21 @@ public class RepoListAdapter extends ArrayAdapter {
             @Override
             public void onClick(View v) {
                 //TODO Change the text of this Toast.
-                RepositoryStorage.getInstance().store(item.getRepository(), context);
+                try {
+                    RepositoryStorage.getInstance().store(item.getRepository(), context);
+                }
+                catch (Exception e) {
+
+                }
+
                 String text;
-                text = RepositoryStorage.getInstance().fetch(context).getName() + RepositoryStorage.getInstance().fetch(context).getOwner() + " is Stored";
-                Toast addRepoClickToast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
-                addRepoClickToast.show();
+                List<Repository> list = RepositoryStorage.getInstance().fetchAll(context);
+                for (Repository r: list){
+                    System.out.println(r.getName());
+                }
+                //text = RepositoryStorage.getInstance().fetchAll(context).getName() + RepositoryStorage.getInstance().fetch(context).getOwner() + " is Stored";
+                //Toast addRepoClickToast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
+                //addRepoClickToast.show();
 
             }
         });
