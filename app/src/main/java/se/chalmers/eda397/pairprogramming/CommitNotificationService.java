@@ -1,9 +1,11 @@
 package se.chalmers.eda397.pairprogramming;
 
 import android.app.IntentService;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
 import se.chalmers.eda397.pairprogramming.core.ConnectionManager;
@@ -26,9 +28,12 @@ public class CommitNotificationService extends IntentService{
         String branch = "master";
         String repo = "PairProgramming";
         String owner = "spukki01";
+        int id = 001;
         Boolean branchChange = this.mGitHubClient.checkCommit(repo, owner, branch);
-        if(branchChange)
+        if(branchChange) {
             this.mHandler.post(new DisplayToast(this, "Commit to: " + repo + "/" + owner + "/" + branch));
+            sendNotification(id, "Commit to: " + repo + "/" + owner + "/" + branch);
+        }
 
     }
 
@@ -45,6 +50,19 @@ public class CommitNotificationService extends IntentService{
         public void run(){
             Toast.makeText(this.mContext, this.mText, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void sendNotification(int id, String text)
+    {
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setContentTitle("New Commit")
+                        .setContentText(text);
+        // Gets an instance of the NotificationManager service
+        NotificationManager mNotifyMgr =
+                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+// Builds the notification and issues it.
+        mNotifyMgr.notify(id, mBuilder.build());
     }
 
 }
