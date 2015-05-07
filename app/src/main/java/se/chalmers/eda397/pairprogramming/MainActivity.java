@@ -71,6 +71,9 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
             case 2:
                 fragment = RepositorySearchFragment.newInstance(3);
                 break;
+            case 3:
+                fragment=TimerFragment.newInstance(4);
+                break;
         }
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)
@@ -87,6 +90,9 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                 break;
             case 3:
                 mTitle = getString(R.string.drawer_item_repository_search);
+                break;
+            case 4:
+                mTitle = getString(R.string.drawer_item_timer);
                 break;
 
         }
