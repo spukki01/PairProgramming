@@ -3,7 +3,7 @@ package se.chalmers.eda397.pairprogramming;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +34,7 @@ public class RepositoryFragment extends Fragment {
 
 
     public static RepositoryFragment newInstance(Repository repo) {
+        System.out.println("New instance " + repo.getName());
         RepositoryFragment fragment = new RepositoryFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_REPOSITORY, repo);
@@ -57,11 +58,14 @@ public class RepositoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        System.out.println("onCreateView");
         mRootView = inflater.inflate(R.layout.fragment_repository, container, false);
 
-        TextView tv = (TextView)mRootView.findViewById(R.id.repo_name_text);
-        tv.setText(mRepository.getName());
-        return inflater.inflate(R.layout.fragment_repository, container, false);
+        /*TextView tv = (TextView)mRootView.findViewById(R.id.repo_name_text);
+        tv.setText(mRepository.getName());*/
+
+        ((TextView) mRootView.findViewById(R.id.repo_name_text)).setText(mRepository.getName());
+        return mRootView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
