@@ -1,8 +1,7 @@
-package se.chalmers.eda397.pairprogramming;
+package se.chalmers.eda397.pairprogramming.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,8 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import se.chalmers.eda397.pairprogramming.model.Repository;
+import se.chalmers.eda397.pairprogramming.R;
+import se.chalmers.eda397.pairprogramming.model.RepoListItem;
 import se.chalmers.eda397.pairprogramming.util.RepositoryStorage;
 
 /**

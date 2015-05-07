@@ -6,11 +6,13 @@ import android.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import se.chalmers.eda397.pairprogramming.adapter.SubscribedRepositoryAdapter;
+import se.chalmers.eda397.pairprogramming.model.RepoListItem;
 import se.chalmers.eda397.pairprogramming.model.Repository;
 import se.chalmers.eda397.pairprogramming.util.RepositoryStorage;
 
@@ -21,14 +23,14 @@ public class SubscribedRepositoriesFragment extends ListFragment {
 
     private View mRootView = null;
 
-    ArrayAdapter<RepoListItem> mAdapter;
-    private List<RepoListItem> mRepoListItems = new ArrayList();
 
     public static SubscribedRepositoriesFragment  newInstance(int sectionNumber) {
         SubscribedRepositoriesFragment fragment = new SubscribedRepositoriesFragment();
+
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -47,25 +49,17 @@ public class SubscribedRepositoriesFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_subscribed_repositories, container, false);
 
-        mAdapter = new RepoListAdapter(inflater.getContext(), mRepoListItems);
-        this.setListAdapter(mAdapter);
-
-        fillList();
-
-        return mRootView;
-    }
-
-    private void fillList(){
-        mAdapter.clear();
-        mRepoListItems.clear();
-
         List<Repository> subscribedRepos = RepositoryStorage.getInstance().fetchAll(getActivity());
+        List<RepoListItem> repoListItems = new ArrayList();
+
         for (Repository r : subscribedRepos) {
-            mRepoListItems.add(new RepoListItem(r));
+            repoListItems.add(new RepoListItem(r));
         }
 
-        mAdapter.addAll(mRepoListItems);
-        mAdapter.notifyDataSetChanged();
+        SubscribedRepositoryAdapter adapter = new SubscribedRepositoryAdapter(inflater.getContext(), repoListItems);
+        this.setListAdapter(adapter);
+
+        return mRootView;
     }
 
     @Override

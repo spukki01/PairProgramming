@@ -1,4 +1,4 @@
-package se.chalmers.eda397.pairprogramming;
+package se.chalmers.eda397.pairprogramming.model;
 
 import se.chalmers.eda397.pairprogramming.model.Repository;
 
