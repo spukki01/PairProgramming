@@ -62,13 +62,12 @@ public class RepositoryFragment extends Fragment {
         System.out.println("onCreateView");
         mRootView = inflater.inflate(R.layout.fragment_repository, container, false);
 
-        /*TextView tv = (TextView)mRootView.findViewById(R.id.repo_name_text);
-        tv.setText(mRepository.getName());*/
-
+        //Set text views
         ((TextView) mRootView.findViewById(R.id.repo_name_text)).setText(mRepository.getName());
         ((TextView) mRootView.findViewById(R.id.repo_owner_text)).setText("Owner: " + mRepository.getOwnerName());
         ((TextView) mRootView.findViewById(R.id.repo_desc)).setText(mRepository.getDescription());
 
+        //Add branch list
         Fragment branchFragment = BranchFragment.newInstance(mRepository.getName(), mRepository.getOwnerName());
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.add(R.id.branch_fragment_container, branchFragment).commit();
@@ -99,16 +98,11 @@ public class RepositoryFragment extends Fragment {
         mListener = null;
     }
 
-    /**
+    /*
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+     * activity.*/
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
