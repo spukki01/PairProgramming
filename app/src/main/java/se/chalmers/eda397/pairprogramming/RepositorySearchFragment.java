@@ -4,30 +4,27 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.StatusLine;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.ArrayList;
+import java.util.List;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import se.chalmers.eda397.pairprogramming.core.ConnectionManager;
+import se.chalmers.eda397.pairprogramming.core.GitHubClient;
+import se.chalmers.eda397.pairprogramming.core.IGitHubClient;
+import se.chalmers.eda397.pairprogramming.model.Repository;
 
 
-public class RepositorySearchFragment extends Fragment implements View.OnClickListener{
+public class RepositorySearchFragment extends ListFragment implements View.OnClickListener{
     /**
      * The fragment argument representing the section number for this
      * fragment.
@@ -35,6 +32,10 @@ public class RepositorySearchFragment extends Fragment implements View.OnClickLi
     private static final String ARG_SECTION_NUMBER = "section_number";
 
     private View mRootView = null;
+
+    ArrayAdapter<RepoListItem> mAdapter;
+
+    private List<RepoListItem> mRepoListItems = new ArrayList();
 
     /**
      * Returns a new instance of this fragment for the given section
@@ -51,12 +52,24 @@ public class RepositorySearchFragment extends Fragment implements View.OnClickLi
     public RepositorySearchFragment () {
     }
 
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        RepoListItem item = (RepoListItem)l.getItemAtPosition(position);
+        MainActivity mainActivity = (MainActivity) this.getActivity();
+        mainActivity.openRepositoryFragment(item.getRepository());
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-         mRootView = inflater.inflate(R.layout.fragment_repository_search, container, false);
+        mRootView = inflater.inflate(R.layout.fragment_repository_search, container, false);
 
         final Button button = (Button) mRootView.findViewById(R.id.repo_search_button);
         button.setOnClickListener(this);
+
+        mAdapter = new RepoListAdapter(
+                inflater.getContext(), mRepoListItems);
+        this.setListAdapter(mAdapter);
 
         return mRootView;
     }
@@ -72,67 +85,40 @@ public class RepositorySearchFragment extends Fragment implements View.OnClickLi
         EditText input = (EditText)mRootView.findViewById(R.id.repo_input);
         String repoName = input.getText().toString();
 
-        String url = "https://api.github.com/search/repositories?q=" + repoName + "+in:name";
-        new RestClient().execute(url);
+        new RepositoryTask().execute(repoName);
 
         InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
     }
 
+    public void addRepoOnClick(View v){
 
-    private class RestClient extends AsyncTask<String, String, String> {
+    }
 
+    private class RepositoryTask extends AsyncTask<String, List<Repository>, List<Repository>> {
+
+        private IGitHubClient mGitHubClient;
+        private RepositoryTask () {
+            mGitHubClient = new GitHubClient(new ConnectionManager());
+        }
         @Override
-        protected String doInBackground(String... uri) {
-            HttpClient httpclient = new DefaultHttpClient();
-            HttpResponse response;
-            String responseString;
-
-            try {
-                response = httpclient.execute(new HttpGet(uri[0]));
-                StatusLine statusLine = response.getStatusLine();
-
-                if(statusLine.getStatusCode() == HttpStatus.SC_OK){
-                    ByteArrayOutputStream out = new ByteArrayOutputStream();
-                    response.getEntity().writeTo(out);
-
-                    responseString = out.toString();
-
-                    out.close();
-                } else{
-                    //Closes the connection.
-                    response.getEntity().getContent().close();
-                    throw new IOException(statusLine.getReasonPhrase());
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                responseString = e.getMessage();
-            }
-
-            return responseString;
+        protected List<Repository> doInBackground(String... repoName) {
+            return this.mGitHubClient.findRepositories(repoName[0]);
         }
 
-        protected void onPostExecute(String result) {
-            TextView text = (TextView)mRootView.findViewById(R.id.repo_text);
+        @Override
+        protected void onPostExecute(List<Repository> result) {
+            if (result.size()>0) {
 
-            try {
-                String parsedString = "";
-                JSONObject jResult = new JSONObject(result);
-                JSONArray jArray = jResult.getJSONArray("items");
+                mAdapter.clear();
+                mRepoListItems.clear();
 
-                for (int i=0; i< jArray.length(); i++) {
-                    JSONObject jObject = jArray.getJSONObject(i);
-                    parsedString = parsedString + System.getProperty("line.separator") + jObject.getInt("id") + ": " + jObject.getString("full_name");
+                for (Repository r : result) {
+                    mRepoListItems.add(new RepoListItem(r));
                 }
-
-                text.setText(parsedString);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-                text.setText(e.getMessage());
+                mAdapter.addAll(mRepoListItems);
+                mAdapter.notifyDataSetChanged();
             }
-
             super.onPostExecute(result);
         }
     }

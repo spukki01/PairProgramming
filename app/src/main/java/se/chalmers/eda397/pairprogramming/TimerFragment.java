@@ -5,7 +5,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +13,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 import java.util.IllegalFormatException;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -227,14 +228,14 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
                 response = httpclient.execute(new HttpGet(uri[0]));
                 StatusLine statusLine = response.getStatusLine();
 
-                if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
+                if(statusLine.getStatusCode() == HttpStatus.SC_OK){
                     ByteArrayOutputStream out = new ByteArrayOutputStream();
                     response.getEntity().writeTo(out);
 
                     responseString = out.toString();
 
                     out.close();
-                } else {
+                } else{
                     //Closes the connection.
                     response.getEntity().getContent().close();
                     throw new IOException(statusLine.getReasonPhrase());
@@ -249,14 +250,14 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         }
 
         protected void onPostExecute(String result) {
-            TextView text = (TextView) mRootView.findViewById(R.id.repo_text);
+            TextView text = (TextView)mRootView.findViewById(R.id.repo_text);
 
             try {
                 String parsedString = "";
                 JSONObject jResult = new JSONObject(result);
                 JSONArray jArray = jResult.getJSONArray("items");
 
-                for (int i = 0; i < jArray.length(); i++) {
+                for (int i=0; i< jArray.length(); i++) {
                     JSONObject jObject = jArray.getJSONObject(i);
                     parsedString = parsedString + System.getProperty("line.separator") + jObject.getInt("id") + ": " + jObject.getString("full_name");
                 }

@@ -6,6 +6,12 @@
 
     <!-- TODO: Update blank fragment layout -->
 
+    <ListView
+        android:id="@id/android:list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"/>
+
     <EditText
         android:layout_width="283dp"
         android:layout_height="wrap_content"
