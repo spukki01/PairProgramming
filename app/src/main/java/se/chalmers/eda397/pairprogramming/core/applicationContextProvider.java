@@ -1,8 +1,5 @@
 package se.chalmers.eda397.pairprogramming.core;
 
-/**
- * Created by Mark on 5/7/2015.
- */
 import android.app.Application;
 import android.content.Context;
 

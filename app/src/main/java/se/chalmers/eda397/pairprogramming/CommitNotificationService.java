@@ -29,7 +29,7 @@ public class CommitNotificationService extends IntentService{
         String repo = "PairProgramming";
         String owner = "spukki01";
         int id = 001;
-        Boolean branchChange = this.mGitHubClient.checkCommit(repo, owner, branch);
+        Boolean branchChange = this.mGitHubClient.isCommitDifferent(repo, owner, branch);
         if(branchChange) {
             this.mHandler.post(new DisplayToast(this, "Commit to: " + repo + "/" + owner + "/" + branch));
             sendNotification(id, "Commit to: " + repo + "/" + owner + "/" + branch);

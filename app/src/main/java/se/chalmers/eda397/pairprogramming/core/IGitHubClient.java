@@ -10,6 +10,5 @@ public interface IGitHubClient {
     List<Repository> findRepositories(String repoName);
     List<Branch> findRelatedBranches(String repoName, String repoOwner);
 
-    String getLatestCommitSHA(String repository, String owner, String branch);
-    Boolean checkCommit(String repository, String owner, String branch);
+    Boolean isCommitDifferent(String repository, String owner, String branch);
 }
