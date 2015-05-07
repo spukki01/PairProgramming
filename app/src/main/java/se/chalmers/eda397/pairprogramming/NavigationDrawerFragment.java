@@ -104,7 +104,9 @@ public class NavigationDrawerFragment extends Fragment {
                 new String[]{
                         getString(R.string.drawer_item_home),
                         getString(R.string.drawer_item_planning_poker),
-                        getString(R.string.drawer_item_repository_search)
+                        getString(R.string.drawer_item_repository_search),
+                        "Timer",
+                        getString(R.string.drawer_item_subscrided_repo)
                 }));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;

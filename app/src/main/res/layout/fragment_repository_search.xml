@@ -1,9 +1,16 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="se.chalmers.eda397.pairprogramming.RepositorySearchFragment">
+    tools:context="se.chalmers.eda397.pairprogramming.RepositorySearchFragment"
+    android:id="@+id/SearchLayout">
 
     <!-- TODO: Update blank fragment layout -->
+
+    <ListView
+        android:id="@id/android:list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"/>
 
     <EditText
         android:layout_width="283dp"

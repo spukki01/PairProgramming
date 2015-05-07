@@ -1,7 +1,12 @@
 package se.chalmers.eda397.pairprogramming;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
+import android.content.Intent;
+import android.net.Uri;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -9,7 +14,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+import se.chalmers.eda397.pairprogramming.model.Repository;
+
+public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks,
+        RepositoryFragment.OnFragmentInteractionListener {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -34,6 +42,13 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+        Intent detailsIntent = new Intent(this, MainActivity.class);
+
+        PendingIntent pendingIntent =
+                TaskStackBuilder.create(this).addNextIntent(getIntent())
+                .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
     }
 
     @Override
@@ -53,7 +68,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         Fragment fragment;
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentManager fragmentManager = getFragmentManager();
 
         switch(position) {
             default:
@@ -65,6 +80,12 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                 break;
             case 2:
                 fragment = RepositorySearchFragment.newInstance(3);
+                break;
+            case 3:
+                fragment=TimerFragment.newInstance(4);
+                break;
+            case 4:
+                fragment=SubscribedRepositoriesFragment.newInstance(5);
                 break;
         }
         fragmentManager.beginTransaction()
@@ -82,6 +103,12 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                 break;
             case 3:
                 mTitle = getString(R.string.drawer_item_repository_search);
+                break;
+            case 4:
+                mTitle = getString(R.string.drawer_item_timer);
+                break;
+            case 5:
+                mTitle = getString(R.string.drawer_item_subscrided_repo);
                 break;
 
         }
@@ -109,4 +136,29 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         return super.onOptionsItemSelected(item);
     }
 
+    /*
+    * Is called form RepositorySearchFragment when clicking a list item.
+    */
+    public void openRepositoryFragment(Repository repository){
+        // Create fragment and give it an argument specifying the article it should show
+        RepositoryFragment newFragment = RepositoryFragment.newInstance(repository);
+
+        FragmentTransaction transaction = getFragmentManager().beginTransaction()
+                .addToBackStack(null).replace(R.id.container, newFragment);
+
+        // Commit the transaction
+        transaction.commit();
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+
+        super.onBackPressed();
+    }
 }
