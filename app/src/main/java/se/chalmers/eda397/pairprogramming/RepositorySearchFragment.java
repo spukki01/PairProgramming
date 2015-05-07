@@ -55,7 +55,9 @@ public class RepositorySearchFragment extends ListFragment implements View.OnCli
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-
+        RepoListItem item = (RepoListItem)l.getItemAtPosition(position);
+        //TODO Go to another fragment using the item.
+        System.out.println("Repo: " + item.getRepository().getName());
     }
 
     @Override
@@ -68,7 +70,6 @@ public class RepositorySearchFragment extends ListFragment implements View.OnCli
         mAdapter = new RepoListAdapter(
                 inflater.getContext(), mRepoListItems);
         this.setListAdapter(mAdapter);
-
 
         return mRootView;
     }

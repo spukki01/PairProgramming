@@ -17,5 +17,6 @@
         android:id="@+id/addRepoButton"
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
-        android:onClick="addRepoOnClick"/>
+        android:onClick="addRepoOnClick"
+        android:focusable="false"/>
 </RelativeLayout>

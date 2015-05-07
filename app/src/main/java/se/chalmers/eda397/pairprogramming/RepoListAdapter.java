@@ -100,6 +100,7 @@ public class RepoListAdapter extends ArrayAdapter {
         });
 
 
+
         return viewToUse;
     }
 }

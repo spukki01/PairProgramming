@@ -1,6 +1,8 @@
 package se.chalmers.eda397.pairprogramming.model;
 
-public class Repository {
+import java.io.Serializable;
+
+public class Repository implements Serializable {
 
     private int id;
     private String name;
