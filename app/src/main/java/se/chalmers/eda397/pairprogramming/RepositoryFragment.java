@@ -35,7 +35,6 @@ public class RepositoryFragment extends Fragment {
 
 
     public static RepositoryFragment newInstance(Repository repo) {
-        System.out.println("New instance " + repo.getName());
         RepositoryFragment fragment = new RepositoryFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_REPOSITORY, repo);
@@ -59,7 +58,6 @@ public class RepositoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        System.out.println("onCreateView");
         mRootView = inflater.inflate(R.layout.fragment_repository, container, false);
 
         //Set text views

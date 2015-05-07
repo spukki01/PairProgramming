@@ -81,7 +81,10 @@ public class RepositoryStorage implements IStorage<Repository> {
                 repo.setOwnerName(temp.getString("owner"));
                 repo.setPrivate(temp.getBoolean("isPrivate"));
                 repo.setName(temp.getString("name"));
-                repo.setBranchesUrl(temp.getString("branchesURL"));
+
+                if(temp.has("branchesURL")){
+                    repo.setBranchesUrl(temp.getString("branchesURL"));
+                }
                 list.add(repo);
             }
         } catch (Exception e) {
