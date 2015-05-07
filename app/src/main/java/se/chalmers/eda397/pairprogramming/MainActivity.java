@@ -76,16 +76,16 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                 fragment = HomeFragment.newInstance(1);
                 break;
             case 1:
-                fragment = PlanningPokerFragment.newInstance(2);
+                fragment = RepositorySearchFragment.newInstance(2);
                 break;
             case 2:
-                fragment = RepositorySearchFragment.newInstance(3);
+                fragment = SubscribedRepositoriesFragment.newInstance(3);
                 break;
             case 3:
-                fragment=TimerFragment.newInstance(4);
+                fragment = PlanningPokerFragment.newInstance(4);
                 break;
             case 4:
-                fragment=SubscribedRepositoriesFragment.newInstance(5);
+                fragment = TimerFragment.newInstance(5);
                 break;
         }
         fragmentManager.beginTransaction()
@@ -99,18 +99,17 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                 mTitle = getString(R.string.drawer_item_home);
                 break;
             case 2:
-                mTitle = getString(R.string.drawer_item_planning_poker);
-                break;
-            case 3:
                 mTitle = getString(R.string.drawer_item_repository_search);
                 break;
-            case 4:
-                mTitle = getString(R.string.drawer_item_timer);
-                break;
-            case 5:
+            case 3:
                 mTitle = getString(R.string.drawer_item_subscrided_repo);
                 break;
-
+            case 4:
+                mTitle = getString(R.string.drawer_item_planning_poker);
+                break;
+            case 5:
+                mTitle = getString(R.string.drawer_item_timer);
+                break;
         }
     }
 

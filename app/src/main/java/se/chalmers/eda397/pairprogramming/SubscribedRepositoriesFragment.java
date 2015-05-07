@@ -1,17 +1,12 @@
 package se.chalmers.eda397.pairprogramming;
 
 import android.app.Activity;
-import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -21,22 +16,14 @@ import se.chalmers.eda397.pairprogramming.util.RepositoryStorage;
 
 
 public class SubscribedRepositoriesFragment extends ListFragment {
-    /**
-     * The fragment argument representing the section number for this
-     * fragment.
-     */
+
     private static final String ARG_SECTION_NUMBER = "section_number";
 
     private View mRootView = null;
 
     ArrayAdapter<RepoListItem> mAdapter;
-
     private List<RepoListItem> mRepoListItems = new ArrayList();
 
-    /**
-     * Returns a new instance of this fragment for the given section
-     * number.
-     */
     public static SubscribedRepositoriesFragment  newInstance(int sectionNumber) {
         SubscribedRepositoriesFragment fragment = new SubscribedRepositoriesFragment();
         Bundle args = new Bundle();
@@ -60,8 +47,7 @@ public class SubscribedRepositoriesFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_subscribed_repositories, container, false);
 
-        mAdapter = new RepoListAdapter(
-                inflater.getContext(), mRepoListItems);
+        mAdapter = new RepoListAdapter(inflater.getContext(), mRepoListItems);
         this.setListAdapter(mAdapter);
 
         fillList();
@@ -70,9 +56,9 @@ public class SubscribedRepositoriesFragment extends ListFragment {
     }
 
     private void fillList(){
-
         mAdapter.clear();
         mRepoListItems.clear();
+
         List<Repository> subscribedRepos = RepositoryStorage.getInstance().fetchAll(getActivity());
         for (Repository r : subscribedRepos) {
             mRepoListItems.add(new RepoListItem(r));
