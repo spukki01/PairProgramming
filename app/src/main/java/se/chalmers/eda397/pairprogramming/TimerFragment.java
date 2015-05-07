@@ -5,7 +5,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +13,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -77,7 +78,14 @@ public class TimerFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         EditText input = (EditText)mRootView.findViewById(R.id.timer_input);
-        int time = Integer.parseInt(input.getText().toString());
+        int time;
+        try {
+            time = Integer.parseInt(input.getText().toString());
+        } catch (Exception e) {
+            Toast addRepoClickToast = Toast.makeText(this.getActivity(), "Try a smaller number", Toast.LENGTH_SHORT);
+            addRepoClickToast.show();
+            return;
+        }
         TextView output = (TextView)mRootView.findViewById(R.id.timer_output);
         if(v.getId() == R.id.start_button) {
             startTimer(time);
@@ -136,63 +144,6 @@ public class TimerFragment extends Fragment implements View.OnClickListener{
     public void pauseTimer()
     {
         //cdtimer.
-    }
-
-    private class RestClient extends AsyncTask<String, String, String> {
-
-        @Override
-        protected String doInBackground(String... uri) {
-            HttpClient httpclient = new DefaultHttpClient();
-            HttpResponse response;
-            String responseString;
-
-            try {
-                response = httpclient.execute(new HttpGet(uri[0]));
-                StatusLine statusLine = response.getStatusLine();
-
-                if(statusLine.getStatusCode() == HttpStatus.SC_OK){
-                    ByteArrayOutputStream out = new ByteArrayOutputStream();
-                    response.getEntity().writeTo(out);
-
-                    responseString = out.toString();
-
-                    out.close();
-                } else{
-                    //Closes the connection.
-                    response.getEntity().getContent().close();
-                    throw new IOException(statusLine.getReasonPhrase());
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                responseString = e.getMessage();
-            }
-
-            return responseString;
-        }
-
-        protected void onPostExecute(String result) {
-            TextView text = (TextView)mRootView.findViewById(R.id.repo_text);
-
-            try {
-                String parsedString = "";
-                JSONObject jResult = new JSONObject(result);
-                JSONArray jArray = jResult.getJSONArray("items");
-
-                for (int i=0; i< jArray.length(); i++) {
-                    JSONObject jObject = jArray.getJSONObject(i);
-                    parsedString = parsedString + System.getProperty("line.separator") + jObject.getInt("id") + ": " + jObject.getString("full_name");
-                }
-
-                text.setText(parsedString);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-                text.setText(e.getMessage());
-            }
-
-            super.onPostExecute(result);
-        }
     }
 
 }
