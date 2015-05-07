@@ -1,9 +1,9 @@
 package se.chalmers.eda397.pairprogramming;
 
 import android.net.Uri;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -58,7 +58,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         Fragment fragment;
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentManager fragmentManager = getFragmentManager();
 
         switch(position) {
             default:
@@ -121,7 +121,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         //args.putInt(RepositoryFragment.ARG_, position);
         //newFragment.setArguments(args);
 
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
         // Replace whatever is in the fragment_container view with this fragment,
         // and add the transaction to the back stack so the user can navigate back

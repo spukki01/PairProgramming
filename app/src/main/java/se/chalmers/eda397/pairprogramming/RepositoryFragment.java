@@ -1,9 +1,10 @@
 package se.chalmers.eda397.pairprogramming;
 
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,6 +66,12 @@ public class RepositoryFragment extends Fragment {
         tv.setText(mRepository.getName());*/
 
         ((TextView) mRootView.findViewById(R.id.repo_name_text)).setText(mRepository.getName());
+        ((TextView) mRootView.findViewById(R.id.repo_owner_text)).setText("Owner: " + mRepository.getOwnerName());
+        ((TextView) mRootView.findViewById(R.id.repo_desc)).setText(mRepository.getDescription());
+
+        Fragment branchFragment = BranchFragment.newInstance(mRepository.getName(), mRepository.getOwnerName());
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.add(R.id.branch_fragment_container, branchFragment).commit();
         return mRootView;
     }
 

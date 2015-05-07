@@ -68,7 +68,7 @@ public class RepoListAdapter extends ArrayAdapter {
         }
 
         holder.titleText.setText("name: " + item.getRepository().getName()
-                + " id: " + item.getRepository().getId());
+                + " Owner: " + item.getRepository().getOwnerName());
 
         TextView textContent = (TextView)viewToUse.findViewById(R.id.repoNameText);
         //final String text = textContent.getText().toString();
