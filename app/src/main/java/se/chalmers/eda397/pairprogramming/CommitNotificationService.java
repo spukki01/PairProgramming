@@ -23,8 +23,13 @@ public class CommitNotificationService extends IntentService{
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        String commitKey = this.mGitHubClient.getLatestCommitSHA("PairProgramming", "spukki01", "master");
-        this.mHandler.post(new DisplayToast(this, commitKey));
+        String branch = "master";
+        String repo = "PairProgramming";
+        String owner = "spukki01";
+        Boolean branchChange = this.mGitHubClient.checkCommit(repo, owner, branch);
+        if(branchChange)
+            this.mHandler.post(new DisplayToast(this, "Commit to: " + repo + "/" + owner + "/" + branch));
+
     }
 
     private class DisplayToast implements Runnable {

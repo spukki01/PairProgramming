@@ -1,5 +1,8 @@
 package se.chalmers.eda397.pairprogramming.core;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -85,7 +88,6 @@ public class GitHubClient implements IGitHubClient {
     @Override
     public String getLatestCommitSHA(String repository, String owner, String branch) {
         String commitSHA = "";
-
         String find_repo_url = "https://api.github.com/repos/" + owner + "/" + repository + "/branches/" + branch;
         String repoResponse = this.mConnectionManager.executeQuery(find_repo_url);
 
@@ -99,4 +101,31 @@ public class GitHubClient implements IGitHubClient {
         return commitSHA;
     }
 
+    @Override
+    public Boolean checkCommit(String repository, String owner, String branch)
+    {
+        String commitSHA = getLatestCommitSHA(repository, owner, branch);
+        boolean isDifferent = false;
+
+        try {
+            Context context = applicationContextProvider.getContext();
+            SharedPreferences sharedPref = context.getSharedPreferences("gitSavedData", Context.MODE_PRIVATE);
+            String defaultValue = "error";
+            String previousSHA = sharedPref.getString(branch, defaultValue);
+            if(previousSHA.equals(commitSHA)) {
+                return isDifferent;
+            }
+            else
+            {
+                isDifferent = true;
+            }
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString(branch, commitSHA);
+            editor.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return isDifferent;
+    }
 }
