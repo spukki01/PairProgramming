@@ -2,7 +2,9 @@ package se.chalmers.eda397.pairprogramming;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -12,16 +14,8 @@ import android.widget.TextView;
 
 public class PlanningPokerFragment extends Fragment implements View.OnClickListener {
 
-    /**
-     * The fragment argument representing the section number for this
-     * fragment.
-     */
     private static final String ARG_SECTION_NUMBER = "section_number";
 
-    /**
-     * Returns a new instance of this fragment for the given section
-     * number.
-     */
     public static PlanningPokerFragment newInstance(int sectionNumber) {
         PlanningPokerFragment fragment = new PlanningPokerFragment();
         Bundle args = new Bundle();
@@ -58,13 +52,15 @@ public class PlanningPokerFragment extends Fragment implements View.OnClickListe
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         builder.setMessage(((Button)v).getText())
-                .setTitle("Your chosen number");
+                .setTitle("Your chosen number")
+                .setNegativeButton(getString(R.string.ok), null);
 
         AlertDialog dialog = builder.create();
 
         dialog.show();
 
         TextView textView = (TextView)dialog.findViewById(android.R.id.message);
-        textView.setTextSize(60);
+        textView.setTextSize(80);
+        textView.setGravity(Gravity.CENTER);
     }
 }

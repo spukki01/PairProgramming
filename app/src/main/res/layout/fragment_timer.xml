@@ -4,8 +4,6 @@
     tools:context="se.chalmers.eda397.pairprogramming.TimerFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:text="00:00:00" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -15,7 +13,7 @@
         android:id="@+id/timer_input"
         android:layout_gravity="center"
         android:autoText="false"
-        android:hint="Enter time" />
+        android:hint="hh:mm:ss" />
 
     <Button
         android:layout_width="120dp"
@@ -23,19 +21,6 @@
         android:text="start"
         android:id="@+id/start_button"
         android:layout_gravity="center_horizontal|bottom" />
-
-    <TextView
-        android:layout_width="165dp"
-        android:layout_height="62dp"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Timer"
-        android:id="@+id/textView"
-        android:layout_gravity="center_horizontal|top"
-        android:textAlignment="center"
-        android:autoText="false"
-        android:elegantTextHeight="false"
-        android:textStyle="bold|italic"
-        android:textSize="48dp" />
 
     <Button
         android:layout_width="wrap_content"
@@ -55,10 +40,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="0"
         android:id="@+id/timer_output"
         android:layout_gravity="center"
-        android:visibility="gone"
+        android:visibility="visible"
         android:singleLine="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Resume"
+        android:id="@+id/resume_button"
+        android:layout_gravity="right|bottom"
+        android:visibility="gone" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/timer_end_text"
+        android:layout_gravity="center_horizontal|top"
+        android:textSize="36sp"
+        android:layout_marginTop="60dp" />
 
 </FrameLayout>
