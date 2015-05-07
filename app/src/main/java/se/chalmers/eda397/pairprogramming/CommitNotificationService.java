@@ -56,6 +56,7 @@ public class CommitNotificationService extends IntentService{
     {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_drawer)
                         .setContentTitle("New Commit")
                         .setContentText(text);
         // Gets an instance of the NotificationManager service
