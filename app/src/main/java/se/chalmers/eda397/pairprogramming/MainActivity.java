@@ -4,8 +4,9 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import android.net.Uri;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
@@ -13,7 +14,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+import se.chalmers.eda397.pairprogramming.model.Repository;
+
+public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks,
+        RepositoryFragment.OnFragmentInteractionListener {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -28,11 +32,11 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     protected PendingIntent mPendingIntent;
     protected AlarmManager mAlarmManager;
 
-    protected static int ALARM_INTERVAL = 1000 * 10 * 1; //milliseconds * seconds * minutes
+    protected static int ALARM_INTERVAL = 1000 * 60 * 15; //milliseconds * seconds * minutes
 
     @Override
-    protected void onRestart() {
-        super.onRestart();
+    protected void onStart() {
+        super.onStart();
         mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), ALARM_INTERVAL, mPendingIntent);
     }
 
@@ -46,19 +50,15 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         mAlarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(getApplicationContext(),  CommitNotificationReceiver.class);
         mPendingIntent = PendingIntent.getBroadcast(this, 1234567, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), ALARM_INTERVAL, mPendingIntent);
-
 
         setContentView(R.layout.activity_main);
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
 
-        // Set up the drawer.
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout)findViewById(R.id.drawer_layout));
     }
 
@@ -80,7 +80,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         Fragment fragment;
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentManager fragmentManager = getFragmentManager();
 
         switch(position) {
             default:
@@ -88,10 +88,16 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                 fragment = HomeFragment.newInstance(1);
                 break;
             case 1:
-                fragment = PlanningPokerFragment.newInstance(2);
+                fragment = RepositorySearchFragment.newInstance(2);
                 break;
             case 2:
-                fragment = RepositorySearchFragment.newInstance(3);
+                fragment = SubscribedRepositoriesFragment.newInstance(3);
+                break;
+            case 3:
+                fragment = PlanningPokerFragment.newInstance(4);
+                break;
+            case 4:
+                fragment = TimerFragment.newInstance(5);
                 break;
         }
         fragmentManager.beginTransaction()
@@ -105,12 +111,17 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                 mTitle = getString(R.string.drawer_item_home);
                 break;
             case 2:
-                mTitle = getString(R.string.drawer_item_planning_poker);
-                break;
-            case 3:
                 mTitle = getString(R.string.drawer_item_repository_search);
                 break;
-
+            case 3:
+                mTitle = getString(R.string.drawer_item_subscrided_repo);
+                break;
+            case 4:
+                mTitle = getString(R.string.drawer_item_planning_poker);
+                break;
+            case 5:
+                mTitle = getString(R.string.drawer_item_timer);
+                break;
         }
     }
 
@@ -136,4 +147,30 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         return super.onOptionsItemSelected(item);
     }
 
+    /*
+    * Is called form RepositorySearchFragment when clicking a list item.
+    */
+    public void openRepositoryFragment(Repository repository){
+        RepositoryFragment newFragment = RepositoryFragment.newInstance(repository);
+
+        getFragmentManager().beginTransaction()
+                .replace(R.id.container, newFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getFragmentManager().getBackStackEntryCount() > 0) {
+            getFragmentManager().popBackStack();
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
 }
