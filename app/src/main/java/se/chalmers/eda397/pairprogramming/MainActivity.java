@@ -1,12 +1,8 @@
 package se.chalmers.eda397.pairprogramming;
 
-import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
-import android.content.Intent;
 import android.net.Uri;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -42,13 +38,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
-
-        Intent detailsIntent = new Intent(this, MainActivity.class);
-
-        PendingIntent pendingIntent =
-                TaskStackBuilder.create(this).addNextIntent(getIntent())
-                .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-
     }
 
     @Override
@@ -139,14 +128,12 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     * Is called form RepositorySearchFragment when clicking a list item.
     */
     public void openRepositoryFragment(Repository repository){
-        // Create fragment and give it an argument specifying the article it should show
         RepositoryFragment newFragment = RepositoryFragment.newInstance(repository);
 
-        FragmentTransaction transaction = getFragmentManager().beginTransaction()
-                .addToBackStack(null).replace(R.id.container, newFragment);
-
-        // Commit the transaction
-        transaction.commit();
+        getFragmentManager().beginTransaction()
+                .replace(R.id.container, newFragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override
@@ -155,9 +142,12 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     }
 
     @Override
-    public void onBackPressed()
-    {
-
-        super.onBackPressed();
+    public void onBackPressed() {
+        if (getFragmentManager().getBackStackEntryCount() > 0) {
+            getFragmentManager().popBackStack();
+        }
+        else {
+            super.onBackPressed();
+        }
     }
 }

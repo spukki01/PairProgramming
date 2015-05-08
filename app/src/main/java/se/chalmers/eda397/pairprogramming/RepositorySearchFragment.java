@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,7 +84,12 @@ public class RepositorySearchFragment extends ListFragment implements View.OnCli
         EditText input = (EditText)mRootView.findViewById(R.id.repo_input);
         String repoName = input.getText().toString();
 
-        new RepositoryTask().execute(repoName);
+        if (repoName.length() > 0) {
+            new RepositoryTask().execute(repoName);
+        }
+        else {
+            Toast.makeText(getActivity(), "Please add a search criteria.", Toast.LENGTH_SHORT).show();
+        }
 
         InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
