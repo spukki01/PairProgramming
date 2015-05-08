@@ -1,4 +1,4 @@
-package se.chalmers.eda397.pairprogramming;
+package se.chalmers.eda397.pairprogramming.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import se.chalmers.eda397.pairprogramming.R;
 import se.chalmers.eda397.pairprogramming.model.Branch;
 
 public class BranchAdapter extends ArrayAdapter<Branch>  {

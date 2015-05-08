@@ -1,12 +1,8 @@
 package se.chalmers.eda397.pairprogramming;
 
-import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
-import android.content.Intent;
 import android.net.Uri;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -42,13 +38,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
-
-        Intent detailsIntent = new Intent(this, MainActivity.class);
-
-        PendingIntent pendingIntent =
-                TaskStackBuilder.create(this).addNextIntent(getIntent())
-                .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-
     }
 
     @Override
@@ -76,16 +65,16 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                 fragment = HomeFragment.newInstance(1);
                 break;
             case 1:
-                fragment = PlanningPokerFragment.newInstance(2);
+                fragment = RepositorySearchFragment.newInstance(2);
                 break;
             case 2:
-                fragment = RepositorySearchFragment.newInstance(3);
+                fragment = SubscribedRepositoriesFragment.newInstance(3);
                 break;
             case 3:
-                fragment=TimerFragment.newInstance(4);
+                fragment = PlanningPokerFragment.newInstance(4);
                 break;
             case 4:
-                fragment=SubscribedRepositoriesFragment.newInstance(5);
+                fragment = TimerFragment.newInstance(5);
                 break;
         }
         fragmentManager.beginTransaction()
@@ -99,18 +88,17 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                 mTitle = getString(R.string.drawer_item_home);
                 break;
             case 2:
-                mTitle = getString(R.string.drawer_item_planning_poker);
-                break;
-            case 3:
                 mTitle = getString(R.string.drawer_item_repository_search);
                 break;
-            case 4:
-                mTitle = getString(R.string.drawer_item_timer);
-                break;
-            case 5:
+            case 3:
                 mTitle = getString(R.string.drawer_item_subscrided_repo);
                 break;
-
+            case 4:
+                mTitle = getString(R.string.drawer_item_planning_poker);
+                break;
+            case 5:
+                mTitle = getString(R.string.drawer_item_timer);
+                break;
         }
     }
 
@@ -140,14 +128,12 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     * Is called form RepositorySearchFragment when clicking a list item.
     */
     public void openRepositoryFragment(Repository repository){
-        // Create fragment and give it an argument specifying the article it should show
         RepositoryFragment newFragment = RepositoryFragment.newInstance(repository);
 
-        FragmentTransaction transaction = getFragmentManager().beginTransaction()
-                .addToBackStack(null).replace(R.id.container, newFragment);
-
-        // Commit the transaction
-        transaction.commit();
+        getFragmentManager().beginTransaction()
+                .replace(R.id.container, newFragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override
@@ -156,9 +142,12 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     }
 
     @Override
-    public void onBackPressed()
-    {
-
-        super.onBackPressed();
+    public void onBackPressed() {
+        if (getFragmentManager().getBackStackEntryCount() > 0) {
+            getFragmentManager().popBackStack();
+        }
+        else {
+            super.onBackPressed();
+        }
     }
 }

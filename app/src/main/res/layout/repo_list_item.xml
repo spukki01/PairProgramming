@@ -5,18 +5,18 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
         android:id="@+id/repoNameText"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true" />
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="+"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
+        android:text="@string/repo_item_add"
         android:id="@+id/addRepoButton"
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
         android:onClick="addRepoOnClick"
-        android:focusable="false"/>
+        android:focusable="false"
+        android:textSize="32sp" />
 </RelativeLayout>
