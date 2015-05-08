@@ -13,93 +13,66 @@ import android.widget.Toast;
 import java.util.List;
 
 import se.chalmers.eda397.pairprogramming.R;
-import se.chalmers.eda397.pairprogramming.model.RepoListItem;
+import se.chalmers.eda397.pairprogramming.model.Repository;
 import se.chalmers.eda397.pairprogramming.util.RepositoryStorage;
 
-/**
- * Created by marcusisaksson on 15-04-28.
- */
 public class RepoListAdapter extends ArrayAdapter {
 
-    private Context context;
-    private boolean useList = true;
+    private Context mContext;
 
     public RepoListAdapter(Context context, List items) {
         super(context, android.R.layout.simple_list_item_1, items);
-        this.context = context;
+        this.mContext = context;
     }
 
-    /**
-     * Holder for the list items.
-     */
     private class ViewHolder{
         TextView titleText;
     }
 
-    /**
-     *
-     * @param position
-     * @param convertView
-     * @param parent
-     * @return
-     */
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder = null;
-        final RepoListItem item = (RepoListItem)getItem(position);
-        View viewToUse = null;
+        View viewToUse;
+        ViewHolder holder;
 
         // This block exists to inflate the settings list item conditionally based on whether
         // we want to support a grid or list view.
-        LayoutInflater mInflater = (LayoutInflater) context
-                .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater mInflater = (LayoutInflater) mContext.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+
         if (convertView == null) {
-            if(useList){
-                viewToUse = mInflater.inflate(R.layout.repo_list_item, null);
-            } /*else {
-                viewToUse = mInflater.inflate(R.layout.example_grid_item, null);
-            }*/
+            viewToUse = mInflater.inflate(R.layout.repo_list_item, null);
 
             holder = new ViewHolder();
             holder.titleText = (TextView)viewToUse.findViewById(R.id.repoNameText);
             viewToUse.setTag(holder);
-        } else {
+        }
+        else {
             viewToUse = convertView;
             holder = (ViewHolder) viewToUse.getTag();
         }
 
-        holder.titleText.setText("name: " + item.getRepository().getName()
-                + " Owner: " + item.getRepository().getOwnerName());
+        final Repository item = (Repository)getItem(position);
+        holder.titleText.setText("Name: " + item.getName() + " Owner: " + item.getOwnerName());
 
-        TextView textContent = (TextView)viewToUse.findViewById(R.id.repoNameText);
-        //final String text = textContent.getText().toString();
 
-        //Handle buttons and add onClickListeners
-        Button addRepoButton = (Button)viewToUse.findViewById(R.id.addRepoButton);
-
-        addRepoButton.setOnClickListener(new View.OnClickListener(){
+        Button repoButton = (Button)viewToUse.findViewById(R.id.addRepoButton);
+        repoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO Change the text of this Toast.
+                Button button = (Button)v;
+                String toastText = "";
                 try {
-                    RepositoryStorage.getInstance().store(item.getRepository(), context);
-                }
-                catch (Exception e) {
-                    //TODO Do something useful.
+                    if (button.getText().equals(mContext.getString(R.string.repo_item_add))) {
+                        RepositoryStorage.getInstance().store(item, mContext);
+                        toastText = item.getName() + " is stored";
+                        button.setText(mContext.getString(R.string.repo_item_remove));
+                    }
+                } catch (Exception e) {
+                    toastText = "Unable to store: " + item.getName();
                     e.printStackTrace();
                 }
 
-                /*List<Repository> list = RepositoryStorage.getInstance().fetchAll(context);
-                for (Repository r: list){
-                    System.out.println(r.getName());
-                }*/
-                String toastText = item.getRepository().getName() + " is stored";
-                Toast addRepoClickToast = Toast.makeText(context, toastText, Toast.LENGTH_SHORT);
-                addRepoClickToast.show();
-
+                Toast.makeText(mContext, toastText, Toast.LENGTH_SHORT).show();
             }
         });
-
-
 
         return viewToUse;
     }

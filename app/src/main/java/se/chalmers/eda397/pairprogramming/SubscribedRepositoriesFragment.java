@@ -8,11 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import se.chalmers.eda397.pairprogramming.adapter.SubscribedRepositoryAdapter;
-import se.chalmers.eda397.pairprogramming.model.RepoListItem;
 import se.chalmers.eda397.pairprogramming.model.Repository;
 import se.chalmers.eda397.pairprogramming.util.RepositoryStorage;
 
@@ -40,23 +38,17 @@ public class SubscribedRepositoriesFragment extends ListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        RepoListItem item = (RepoListItem)l.getItemAtPosition(position);
-        MainActivity mainActivity = (MainActivity) this.getActivity();
-        mainActivity.openRepositoryFragment(item.getRepository());
+        Repository item = (Repository)l.getItemAtPosition(position);
+        ((MainActivity)getActivity()).openRepositoryFragment(item);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_subscribed_repositories, container, false);
 
-        List<Repository> subscribedRepos = RepositoryStorage.getInstance().fetchAll(getActivity());
-        List<RepoListItem> repoListItems = new ArrayList();
+        List<Repository> subscribedRepositories = RepositoryStorage.getInstance().fetchAll(getActivity());
 
-        for (Repository r : subscribedRepos) {
-            repoListItems.add(new RepoListItem(r));
-        }
-
-        SubscribedRepositoryAdapter adapter = new SubscribedRepositoryAdapter(inflater.getContext(), repoListItems);
+        SubscribedRepositoryAdapter adapter = new SubscribedRepositoryAdapter(inflater.getContext(), subscribedRepositories);
         this.setListAdapter(adapter);
 
         return mRootView;

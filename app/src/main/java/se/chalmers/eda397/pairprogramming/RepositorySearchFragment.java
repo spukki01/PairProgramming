@@ -21,7 +21,6 @@ import se.chalmers.eda397.pairprogramming.adapter.RepoListAdapter;
 import se.chalmers.eda397.pairprogramming.core.ConnectionManager;
 import se.chalmers.eda397.pairprogramming.core.GitHubClient;
 import se.chalmers.eda397.pairprogramming.core.IGitHubClient;
-import se.chalmers.eda397.pairprogramming.model.RepoListItem;
 import se.chalmers.eda397.pairprogramming.model.Repository;
 
 
@@ -34,9 +33,9 @@ public class RepositorySearchFragment extends ListFragment implements View.OnCli
 
     private View mRootView = null;
 
-    ArrayAdapter<RepoListItem> mAdapter;
+    ArrayAdapter<Repository> mAdapter;
 
-    private List<RepoListItem> mRepoListItems = new ArrayList();
+    private List<Repository> mRepositories = new ArrayList();
 
     /**
      * Returns a new instance of this fragment for the given section
@@ -56,9 +55,8 @@ public class RepositorySearchFragment extends ListFragment implements View.OnCli
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        RepoListItem item = (RepoListItem)l.getItemAtPosition(position);
-        MainActivity mainActivity = (MainActivity) this.getActivity();
-        mainActivity.openRepositoryFragment(item.getRepository());
+        Repository item = (Repository)l.getItemAtPosition(position);
+        ((MainActivity)this.getActivity()).openRepositoryFragment(item);
     }
 
     @Override
@@ -68,8 +66,7 @@ public class RepositorySearchFragment extends ListFragment implements View.OnCli
         final Button button = (Button) mRootView.findViewById(R.id.repo_search_button);
         button.setOnClickListener(this);
 
-        mAdapter = new RepoListAdapter(
-                inflater.getContext(), mRepoListItems);
+        mAdapter = new RepoListAdapter(inflater.getContext(), mRepositories);
         this.setListAdapter(mAdapter);
 
         return mRootView;
@@ -92,16 +89,13 @@ public class RepositorySearchFragment extends ListFragment implements View.OnCli
         imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
     }
 
-    public void addRepoOnClick(View v){
-
-    }
-
     private class RepositoryTask extends AsyncTask<String, List<Repository>, List<Repository>> {
 
         private IGitHubClient mGitHubClient;
         private RepositoryTask () {
             mGitHubClient = new GitHubClient(new ConnectionManager());
         }
+
         @Override
         protected List<Repository> doInBackground(String... repoName) {
             return this.mGitHubClient.findRepositories(repoName[0]);
@@ -110,14 +104,10 @@ public class RepositorySearchFragment extends ListFragment implements View.OnCli
         @Override
         protected void onPostExecute(List<Repository> result) {
             if (result.size()>0) {
-
                 mAdapter.clear();
-                mRepoListItems.clear();
+                mRepositories = result;
 
-                for (Repository r : result) {
-                    mRepoListItems.add(new RepoListItem(r));
-                }
-                mAdapter.addAll(mRepoListItems);
+                mAdapter.addAll(mRepositories);
                 mAdapter.notifyDataSetChanged();
             }
             super.onPostExecute(result);
