@@ -4,28 +4,28 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.ListView;
+import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import java.util.ArrayList;
 import java.util.List;
 
-import se.chalmers.eda397.pairprogramming.model.Repository;
+import se.chalmers.eda397.pairprogramming.adapter.RepoListAdapter;
 import se.chalmers.eda397.pairprogramming.core.ConnectionManager;
 import se.chalmers.eda397.pairprogramming.core.GitHubClient;
 import se.chalmers.eda397.pairprogramming.core.IGitHubClient;
+import se.chalmers.eda397.pairprogramming.model.Repository;
 
 
-public class RepositorySearchFragment extends Fragment implements View.OnClickListener{
+public class RepositorySearchFragment extends ListFragment implements View.OnClickListener{
     /**
      * The fragment argument representing the section number for this
      * fragment.
@@ -33,6 +33,10 @@ public class RepositorySearchFragment extends Fragment implements View.OnClickLi
     private static final String ARG_SECTION_NUMBER = "section_number";
 
     private View mRootView = null;
+
+    ArrayAdapter<Repository> mAdapter;
+
+    private List<Repository> mRepositories = new ArrayList();
 
     /**
      * Returns a new instance of this fragment for the given section
@@ -49,12 +53,22 @@ public class RepositorySearchFragment extends Fragment implements View.OnClickLi
     public RepositorySearchFragment () {
     }
 
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        Repository item = (Repository)l.getItemAtPosition(position);
+        ((MainActivity)this.getActivity()).openRepositoryFragment(item);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_repository_search, container, false);
 
         final Button button = (Button) mRootView.findViewById(R.id.repo_search_button);
         button.setOnClickListener(this);
+
+        mAdapter = new RepoListAdapter(inflater.getContext(), mRepositories);
+        this.setListAdapter(mAdapter);
 
         return mRootView;
     }
@@ -70,12 +84,16 @@ public class RepositorySearchFragment extends Fragment implements View.OnClickLi
         EditText input = (EditText)mRootView.findViewById(R.id.repo_input);
         String repoName = input.getText().toString();
 
-        new RepositoryTask().execute(repoName);
+        if (repoName.length() > 0) {
+            new RepositoryTask().execute(repoName);
+        }
+        else {
+            Toast.makeText(getActivity(), "Please add a search criteria.", Toast.LENGTH_SHORT).show();
+        }
 
         InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
     }
-
 
     private class RepositoryTask extends AsyncTask<String, List<Repository>, List<Repository>> {
 
@@ -92,8 +110,11 @@ public class RepositorySearchFragment extends Fragment implements View.OnClickLi
         @Override
         protected void onPostExecute(List<Repository> result) {
             if (result.size()>0) {
-                TextView text = (TextView) mRootView.findViewById(R.id.repo_text);
-                text.setText("name: " + result.get(0).getName() + " Id: " + result.get(0).getId());
+                mAdapter.clear();
+                mRepositories = result;
+
+                mAdapter.addAll(mRepositories);
+                mAdapter.notifyDataSetChanged();
             }
             super.onPostExecute(result);
         }

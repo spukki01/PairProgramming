@@ -1,28 +1,32 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="se.chalmers.eda397.pairprogramming.RepositorySearchFragment">
-
-    <!-- TODO: Update blank fragment layout -->
+    tools:context="se.chalmers.eda397.pairprogramming.RepositorySearchFragment"
+    android:id="@+id/SearchLayout">
 
     <EditText
-        android:layout_width="283dp"
+        android:layout_width="260dp"
         android:layout_height="wrap_content"
         android:id="@+id/repo_input"
         android:layout_gravity="left|bottom"
-        android:hint="Enter repository name" />
+        android:hint="Enter repository name"
+        android:layout_margin="10dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Search"
         android:id="@+id/repo_search_button"
-        android:layout_gravity="right|bottom" />
+        android:layout_gravity="right|bottom"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="4dp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="488dp"
-        android:id="@+id/repo_text"
-        android:layout_gravity="center_horizontal|top"
-        android:singleLine="false" />
-</FrameLayout>
+    <ListView
+        android:id="@id/android:list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="top"
+        android:layout_marginTop="60dp" />
+
+</RelativeLayout>
