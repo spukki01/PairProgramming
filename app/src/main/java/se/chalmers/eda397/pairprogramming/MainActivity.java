@@ -2,7 +2,6 @@ package se.chalmers.eda397.pairprogramming;
 
 import android.net.Uri;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -55,10 +54,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
-        // update the main content by replacing fragments
         Fragment fragment;
-        FragmentManager fragmentManager = getFragmentManager();
-
         switch(position) {
             default:
             case 0:
@@ -77,7 +73,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                 fragment = TimerFragment.newInstance(5);
                 break;
         }
-        fragmentManager.beginTransaction()
+
+        getFragmentManager().beginTransaction()
                 .replace(R.id.container, fragment)
                 .commit();
     }
