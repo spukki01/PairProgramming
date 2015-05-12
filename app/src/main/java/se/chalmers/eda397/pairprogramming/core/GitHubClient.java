@@ -56,27 +56,24 @@ public class GitHubClient implements IGitHubClient {
     public List<Branch> findRelatedBranches(String repoName, String repoOwner) {
         List<Branch> list = new ArrayList<>();
 
-        String find_repo_url = "https://api.github.com/search/repositories?q=user:"+repoOwner+"&repo:"+repoName;
+        String find_repo_url = "https://api.github.com/repos/"+repoOwner+"/"+repoName;
         String repoResponse = this.mConnectionManager.executeQuery(find_repo_url);
 
         try {
             JSONObject jResult = new JSONObject(repoResponse);
-            JSONArray jArray = jResult.getJSONArray("items");
 
-            if (jArray.length() == 1) {
-                Repository repo = mRepoMapper.map(jArray.getJSONObject(0));
+            Repository repo = mRepoMapper.map(jResult);
 
-                String find_branches_url = repo.getBranchesUrl().replace("{/branch}", "");
-                String branchResponse = this.mConnectionManager.executeQuery(find_branches_url);
+            String find_branches_url = repo.getBranchesUrl().replace("{/branch}", "");
+            String branchResponse = this.mConnectionManager.executeQuery(find_branches_url);
 
-                JSONArray jBranches = new JSONArray(branchResponse);
+            JSONArray jBranches = new JSONArray(branchResponse);
 
-                for (int i=0; i< jBranches.length(); i++) {
-                    JSONObject jObject = jBranches.getJSONObject(i);
-                    list.add(mBranchMapper.map(jObject));
-                }
-
+            for (int i=0; i< jBranches.length(); i++) {
+                JSONObject jObject = jBranches.getJSONObject(i);
+                list.add(mBranchMapper.map(jObject));
             }
+
 
         } catch (JSONException e) {
             e.printStackTrace();
