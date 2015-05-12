@@ -32,7 +32,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     protected PendingIntent mPendingIntent;
     protected AlarmManager mAlarmManager;
 
-    protected static int ALARM_INTERVAL = 1000 * 60 * 15; //milliseconds * seconds * minutes
+    protected static int ALARM_INTERVAL = 1000 * 30 * 1; //milliseconds * seconds * minutes
 
     @Override
     protected void onStart() {
