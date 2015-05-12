@@ -57,6 +57,7 @@ public class RepoListAdapter extends ArrayAdapter {
         repoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast toast = new Toast(mContext);
                 Button button = (Button)v;
                 String toastText = "";
                 try {
@@ -64,13 +65,17 @@ public class RepoListAdapter extends ArrayAdapter {
                         RepositoryStorage.getInstance().store(item, mContext);
                         toastText = item.getName() + " is stored";
                         button.setText(mContext.getString(R.string.repo_item_remove));
+                    } else if (button.getText().equals("-")){
+                        RepositoryStorage.getInstance().remove(item, mContext);
+                        toastText = item.getName() + " is removed";
+                        button.setText("+");
                     }
                 } catch (Exception e) {
                     toastText = "Unable to store: " + item.getName();
                     e.printStackTrace();
                 }
-
-                Toast.makeText(mContext, toastText, Toast.LENGTH_SHORT).show();
+                toast.cancel();
+                toast.makeText(mContext, toastText, Toast.LENGTH_SHORT).show();
             }
         });
 
