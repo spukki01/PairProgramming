@@ -18,9 +18,11 @@
     <string name="repo_item_remove">-</string>
 
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="navigation_drawer_open">Open Navigation Drawer</string>
     <string name="navigation_drawer_close">Close Navigation Drawer</string>
     <string name="drawer_item_subscrided_repo">Your Repos</string>
+    <string name="us_type">Story type:</string>
+    <string name="us_desc">Description:</string>
+    <string name="us_created_date">Created date:</string>
+    <string name="us_estimated">Estimated:</string>
 </resources>
