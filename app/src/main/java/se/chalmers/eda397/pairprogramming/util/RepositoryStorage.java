@@ -1,30 +1,23 @@
 package se.chalmers.eda397.pairprogramming.util;
 
 import android.content.Context;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import se.chalmers.eda397.pairprogramming.model.Repository;
 
-/**
- * TODO For now, only one Repository can be saved.
- */
 public class RepositoryStorage implements IStorage<Repository> {
+
     private static RepositoryStorage instance = null;
     private String FILENAME = "repositories";
-    private JSONObject mJsonObject = new JSONObject();
-    private JSONArray mArray = new JSONArray();
 
     private RepositoryStorage() {
 
@@ -41,16 +34,15 @@ public class RepositoryStorage implements IStorage<Repository> {
     public void store(Repository repository, Context context) throws JSONException {
         JSONObject jsonObject;
         JSONArray array;
+
         try {
             jsonObject = readJsonFile(context.openFileInput(FILENAME));
             array = jsonObject.getJSONArray("repositories");
         } catch (FileNotFoundException e) {
-            jsonObject = new JSONObject();
             array = new JSONArray();
         }
+
         try {
-
-
             array.put(createJsonRepo(repository));
 
             JSONObject newJsonObject = new JSONObject();
@@ -67,7 +59,7 @@ public class RepositoryStorage implements IStorage<Repository> {
 
     @Override
     public List<Repository> fetchAll(Context context) {
-        List<Repository> list = new ArrayList<Repository>();
+        List<Repository> list = new ArrayList<>();
         try {
             FileInputStream fis = context.openFileInput(FILENAME);
             JSONObject jsonObject = readJsonFile(fis);

@@ -1,20 +1,16 @@
 package se.chalmers.eda397.pairprogramming;
 
-import android.app.Activity;
-import android.app.Notification;
+import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.os.Vibrator;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -33,40 +29,39 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
      */
     private CharSequence mTitle;
 
+    protected PendingIntent mPendingIntent;
+    protected AlarmManager mAlarmManager;
+
+    protected static int ALARM_INTERVAL = 1000 * 30 * 1; //milliseconds * seconds * minutes
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), ALARM_INTERVAL, mPendingIntent);
+    }
+
+    @Override
+    protected void onStop() {
+        this.mAlarmManager.cancel(this.mPendingIntent);
+        super.onStop();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mAlarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(getApplicationContext(),  CommitNotificationReceiver.class);
+        mPendingIntent = PendingIntent.getBroadcast(this, 1234567, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
         setContentView(R.layout.activity_main);
-        /**System.out.println("before start");
-        Vibrator vibrator = (Vibrator) getSystemService(this.VIBRATOR_SERVICE);
-        if (vibrator.hasVibrator()) {
-            System.out.println("YES");
-        } else {
-            System.out.println("NO");
-        }
-        vibrator.vibrate(10000); // 10 seconds of vibration
-        System.out.println("before start1");
-        NotificationCompat.Builder builder1 = new NotificationCompat.Builder(this)
-                .setDefaults(Notification.DEFAULT_SOUND)
-                .setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 });
-        System.out.println("after end");
-        **/
-        mNavigationDrawerFragment = (NavigationDrawerFragment)
-                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+
+        mNavigationDrawerFragment = (NavigationDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
 
-        // Set up the drawer.
-        mNavigationDrawerFragment.setUp(
-                R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout));
-
-        Intent detailsIntent = new Intent(this, MainActivity.class);
-
-        PendingIntent pendingIntent =
-                TaskStackBuilder.create(this).addNextIntent(getIntent())
-                .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-
+        mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout)findViewById(R.id.drawer_layout));
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -93,16 +88,16 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                 fragment = HomeFragment.newInstance(1);
                 break;
             case 1:
-                fragment = PlanningPokerFragment.newInstance(2);
+                fragment = RepositorySearchFragment.newInstance(2);
                 break;
             case 2:
-                fragment = RepositorySearchFragment.newInstance(3);
+                fragment = SubscribedRepositoriesFragment.newInstance(3);
                 break;
             case 3:
-                fragment=TimerFragment.newInstance(4);
+                fragment = PlanningPokerFragment.newInstance(4);
                 break;
             case 4:
-                fragment=SubscribedRepositoriesFragment.newInstance(5);
+                fragment = TimerFragment.newInstance(5);
                 break;
         }
         fragmentManager.beginTransaction()
@@ -116,18 +111,17 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                 mTitle = getString(R.string.drawer_item_home);
                 break;
             case 2:
-                mTitle = getString(R.string.drawer_item_planning_poker);
-                break;
-            case 3:
                 mTitle = getString(R.string.drawer_item_repository_search);
                 break;
-            case 4:
-                mTitle = getString(R.string.drawer_item_timer);
-                break;
-            case 5:
+            case 3:
                 mTitle = getString(R.string.drawer_item_subscrided_repo);
                 break;
-
+            case 4:
+                mTitle = getString(R.string.drawer_item_planning_poker);
+                break;
+            case 5:
+                mTitle = getString(R.string.drawer_item_timer);
+                break;
         }
     }
 
@@ -157,14 +151,12 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     * Is called form RepositorySearchFragment when clicking a list item.
     */
     public void openRepositoryFragment(Repository repository){
-        // Create fragment and give it an argument specifying the article it should show
         RepositoryFragment newFragment = RepositoryFragment.newInstance(repository);
 
-        FragmentTransaction transaction = getFragmentManager().beginTransaction()
-                .addToBackStack(null).replace(R.id.container, newFragment);
-
-        // Commit the transaction
-        transaction.commit();
+        getFragmentManager().beginTransaction()
+                .replace(R.id.container, newFragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override
@@ -173,14 +165,12 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     }
 
     @Override
-    public void onBackPressed()
-    {
-
-        super.onBackPressed();
+    public void onBackPressed() {
+        if (getFragmentManager().getBackStackEntryCount() > 0) {
+            getFragmentManager().popBackStack();
+        }
+        else {
+            super.onBackPressed();
+        }
     }
-
-
-
 }
-
-
