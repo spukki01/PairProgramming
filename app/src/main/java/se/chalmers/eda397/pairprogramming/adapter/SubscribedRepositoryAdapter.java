@@ -31,7 +31,7 @@ public class SubscribedRepositoryAdapter extends ArrayAdapter {
         }
 
         public View getView(int position, View convertView, ViewGroup parent) {
-            View viewToUse;
+            final View viewToUse;
             ViewHolder holder;
 
             // This block exists to inflate the settings list item conditionally based on whether
@@ -60,6 +60,8 @@ public class SubscribedRepositoryAdapter extends ArrayAdapter {
                 @Override
                 public void onClick(View v) {
                     RepositoryStorage.getInstance().remove(item, mContext);
+                    clear();
+                    addAll(RepositoryStorage.getInstance().fetchAll(mContext));
                     notifyDataSetChanged();
 
                     String toastText = item.getName() + " is removed";
