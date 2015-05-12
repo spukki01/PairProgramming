@@ -1,5 +1,7 @@
 package se.chalmers.eda397.pairprogramming;
 
+import android.app.Activity;
+import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Intent;
@@ -7,10 +9,12 @@ import android.net.Uri;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -33,7 +37,20 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        /**System.out.println("before start");
+        Vibrator vibrator = (Vibrator) getSystemService(this.VIBRATOR_SERVICE);
+        if (vibrator.hasVibrator()) {
+            System.out.println("YES");
+        } else {
+            System.out.println("NO");
+        }
+        vibrator.vibrate(10000); // 10 seconds of vibration
+        System.out.println("before start1");
+        NotificationCompat.Builder builder1 = new NotificationCompat.Builder(this)
+                .setDefaults(Notification.DEFAULT_SOUND)
+                .setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 });
+        System.out.println("after end");
+        **/
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
@@ -161,4 +178,9 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 
         super.onBackPressed();
     }
+
+
+
 }
+
+
