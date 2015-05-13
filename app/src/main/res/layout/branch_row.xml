@@ -3,7 +3,8 @@
     android:layout_height="match_parent"
     android:padding="2dp"
     android:id="@+id/branch_row"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:onClick="branchItemOnClick">
 
     <TextView
         android:id="@+id/branch_name_text"

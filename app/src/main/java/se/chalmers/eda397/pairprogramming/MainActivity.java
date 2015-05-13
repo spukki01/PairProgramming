@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import se.chalmers.eda397.pairprogramming.model.Branch;
 import se.chalmers.eda397.pairprogramming.model.Repository;
 
 public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks,
@@ -130,6 +131,14 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     public void openRepositoryFragment(Repository repository){
         RepositoryFragment newFragment = RepositoryFragment.newInstance(repository);
 
+        getFragmentManager().beginTransaction()
+                .replace(R.id.container, newFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    public void openCommitsFragment(String repoName, String repoOwner, String branchName){
+        CommitsFragment newFragment = CommitsFragment.newInstance(repoName, repoOwner, branchName);
         getFragmentManager().beginTransaction()
                 .replace(R.id.container, newFragment)
                 .addToBackStack(null)

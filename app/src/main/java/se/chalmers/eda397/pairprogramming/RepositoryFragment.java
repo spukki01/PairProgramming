@@ -66,7 +66,7 @@ public class RepositoryFragment extends Fragment {
         ((TextView) mRootView.findViewById(R.id.repo_desc)).setText(mRepository.getDescription());
 
         //Add branch list
-        Fragment branchFragment = BranchFragment.newInstance(mRepository.getName(), mRepository.getOwnerName());
+        Fragment branchFragment = BranchListFragment.newInstance(mRepository.getName(), mRepository.getOwnerName());
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.add(R.id.branch_fragment_container, branchFragment).commit();
         return mRootView;

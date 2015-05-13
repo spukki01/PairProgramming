@@ -9,15 +9,12 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import java.util.List;
 
-import se.chalmers.eda397.pairprogramming.adapter.BranchAdapter;
 import se.chalmers.eda397.pairprogramming.core.ConnectionManager;
 import se.chalmers.eda397.pairprogramming.core.GitHubClient;
 import se.chalmers.eda397.pairprogramming.core.IGitHubClient;
-import se.chalmers.eda397.pairprogramming.model.Branch;
 import se.chalmers.eda397.pairprogramming.model.Commit;
 
 
@@ -32,29 +29,28 @@ import se.chalmers.eda397.pairprogramming.model.Commit;
 public class CommitsFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_REPO_OWNER = "RepoOwner";
+    private static final String ARG_REPO_NAME= "RepoName";
+    private static final String ARG_BRANCH_NAME = "BranchName";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private String mRepoOwner;
+    private String mRepoName;
+    private String mBranchName;
+
+    private View mRootView;
+
 
     private OnFragmentInteractionListener mListener;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment CommitsFragment.
-     */
+
     // TODO: Rename and change types and number of parameters
-    public static CommitsFragment newInstance(String param1, String param2) {
+    public static CommitsFragment newInstance(String repoName, String repoOwner, String branchName) {
         CommitsFragment fragment = new CommitsFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_REPO_OWNER, repoOwner);
+        args.putString(ARG_REPO_NAME, repoName);
+        args.putString(ARG_BRANCH_NAME, branchName);
         fragment.setArguments(args);
         return fragment;
     }
@@ -67,16 +63,25 @@ public class CommitsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mRepoOwner = getArguments().getString(ARG_REPO_OWNER);
+            mRepoName = getArguments().getString(ARG_REPO_NAME);
+            mBranchName = getArguments().getString(ARG_BRANCH_NAME);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_commits, container, false);
+        mRootView = inflater.inflate(R.layout.fragment_branch, container, false);
+
+        if (getArguments() != null) {
+            mRepoOwner = getArguments().getString(ARG_REPO_OWNER);
+            mRepoName = getArguments().getString(ARG_REPO_NAME);
+            mBranchName = getArguments().getString(ARG_BRANCH_NAME);
+            new CommitsTask().execute(mRepoName, mRepoOwner, mBranchName);
+        }
+
+        return mRootView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -146,7 +151,7 @@ public class CommitsFragment extends Fragment {
         protected void onPostExecute(List<Commit> result) {
             if (result.size() > 0) {
                 //ListView lw = (ListView)mRootView.findViewById(R.id.list_branches);
-                //lw.setAdapter(new BranchAdapter(getActivity(), result));
+                //lw.setAdapter(new BranchListAdapter(getActivity(), result));
             }
 
             mProgressDialog.dismiss();

@@ -1,24 +1,29 @@
 package se.chalmers.eda397.pairprogramming.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import java.util.List;
 
+import se.chalmers.eda397.pairprogramming.MainActivity;
 import se.chalmers.eda397.pairprogramming.R;
 import se.chalmers.eda397.pairprogramming.model.Branch;
+import se.chalmers.eda397.pairprogramming.util.RepositoryStorage;
 
-public class BranchAdapter extends ArrayAdapter<Branch>  {
+public class BranchListAdapter extends ArrayAdapter<Branch>  {
 
     private final Context mContext;
     private List<Branch> mValues;
 
-    public BranchAdapter(Context context, List<Branch> values) {
+    public BranchListAdapter(Context context, List<Branch> values) {
         super(context, R.layout.branch_row, values);
         this.mContext = context;
         this.mValues = values;
@@ -36,7 +41,7 @@ public class BranchAdapter extends ArrayAdapter<Branch>  {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View rowView;
+        final View rowView;
 
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -55,6 +60,7 @@ public class BranchAdapter extends ArrayAdapter<Branch>  {
         else {
             rowView = convertView;
         }
+
 
         ViewHolder tag = (ViewHolder) rowView.getTag();
         tag.branchName.setText(this.mValues.get(position).getName());
