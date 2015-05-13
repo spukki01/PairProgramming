@@ -34,7 +34,7 @@ public class GitHubClient implements IGitHubClient {
     public List<Repository> findRepositories(String repoName) {
         String url = "https://api.github.com/search/repositories?q=" + repoName + "+in:name";
 
-        String response = this.mConnectionManager.executeQuery(url);
+        String response = this.mConnectionManager.select(url);
         List<Repository> list = new ArrayList<>();
         try {
             JSONObject jResult = new JSONObject(response);
@@ -57,7 +57,7 @@ public class GitHubClient implements IGitHubClient {
         List<Branch> list = new ArrayList<>();
 
         String find_repo_url = "https://api.github.com/repos/"+repoOwner+"/"+repoName;
-        String repoResponse = this.mConnectionManager.executeQuery(find_repo_url);
+        String repoResponse = this.mConnectionManager.select(find_repo_url);
 
         try {
             JSONObject jResult = new JSONObject(repoResponse);
@@ -65,7 +65,7 @@ public class GitHubClient implements IGitHubClient {
             Repository repo = mRepoMapper.map(jResult);
 
             String find_branches_url = repo.getBranchesUrl().replace("{/branch}", "");
-            String branchResponse = this.mConnectionManager.executeQuery(find_branches_url);
+            String branchResponse = this.mConnectionManager.select(find_branches_url);
 
             JSONArray jBranches = new JSONArray(branchResponse);
 
@@ -113,7 +113,7 @@ public class GitHubClient implements IGitHubClient {
     private String getLatestCommitSHA(String repository, String owner, String branch) {
         String commitSHA = "";
         String find_repo_url = "https://api.github.com/repos/" + owner + "/" + repository + "/branches/" + branch;
-        String repoResponse = this.mConnectionManager.executeQuery(find_repo_url);
+        String repoResponse = this.mConnectionManager.select(find_repo_url);
 
         try {
             JSONObject jResult = new JSONObject(repoResponse);
