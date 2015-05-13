@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ import se.chalmers.eda397.pairprogramming.adapter.CommitListAdapter;
 import se.chalmers.eda397.pairprogramming.core.ConnectionManager;
 import se.chalmers.eda397.pairprogramming.core.GitHubClient;
 import se.chalmers.eda397.pairprogramming.core.IGitHubClient;
+import se.chalmers.eda397.pairprogramming.model.Branch;
 import se.chalmers.eda397.pairprogramming.model.Commit;
 
 
@@ -93,6 +95,15 @@ public class CommitsFragment extends ListFragment {
         this.setListAdapter(mAdapter);
 
         return mRootView;
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        Commit item = (Commit)l.getItemAtPosition(position);
+        Toast.makeText(this.getActivity().getApplicationContext(), "Committer: "
+                + item.getCommitter()
+                + "\n" + "Message: " + item.getMessage()
+                + "\n" + item.getDate().toString(), Toast.LENGTH_LONG ).show();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
