@@ -1,12 +1,24 @@
 package se.chalmers.eda397.pairprogramming;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+
+import java.util.List;
+
+import se.chalmers.eda397.pairprogramming.adapter.BranchAdapter;
+import se.chalmers.eda397.pairprogramming.core.ConnectionManager;
+import se.chalmers.eda397.pairprogramming.core.GitHubClient;
+import se.chalmers.eda397.pairprogramming.core.IGitHubClient;
+import se.chalmers.eda397.pairprogramming.model.Branch;
+import se.chalmers.eda397.pairprogramming.model.Commit;
 
 
 /**
@@ -104,6 +116,42 @@ public class CommitsFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
+    }
+
+    private class CommitsTask extends AsyncTask<String, List<Commit>, List<Commit>> {
+
+        private IGitHubClient mGitHubClient;
+        private CommitsTask() {
+            mGitHubClient = new GitHubClient(new ConnectionManager());
+        }
+
+        private ProgressDialog mProgressDialog = new ProgressDialog(getActivity());
+
+        @Override
+        protected void onPreExecute() {
+            mProgressDialog.setTitle(R.string.loading);
+            //TODO: remove hard coded string
+            mProgressDialog.setMessage("Please wait while fetching commits...");
+            mProgressDialog.show();
+
+            super.onPreExecute();
+        }
+
+        @Override
+        protected List<Commit> doInBackground(String... args) {
+            return this.mGitHubClient.findCommits(args[0], args[1], args[2]);
+        }
+
+        @Override
+        protected void onPostExecute(List<Commit> result) {
+            if (result.size() > 0) {
+                //ListView lw = (ListView)mRootView.findViewById(R.id.list_branches);
+                //lw.setAdapter(new BranchAdapter(getActivity(), result));
+            }
+
+            mProgressDialog.dismiss();
+            super.onPostExecute(result);
+        }
     }
 
 }
