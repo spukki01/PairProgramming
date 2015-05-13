@@ -13,20 +13,14 @@ import java.util.List;
 import se.chalmers.eda397.pairprogramming.model.Branch;
 import se.chalmers.eda397.pairprogramming.model.Repository;
 import se.chalmers.eda397.pairprogramming.util.BranchMapper;
-import se.chalmers.eda397.pairprogramming.util.IMapper;
 import se.chalmers.eda397.pairprogramming.util.RepositoryMapper;
 
 public class GitHubClient implements IGitHubClient {
 
     private IConnectionManager mConnectionManager;
-    private IMapper<Repository> mRepoMapper;
-    private IMapper<Branch> mBranchMapper;
-
 
     public GitHubClient(IConnectionManager connectionManager) {
         this.mConnectionManager = connectionManager;
-        this.mRepoMapper = new RepositoryMapper();
-        this.mBranchMapper = new BranchMapper();
     }
 
 
@@ -42,7 +36,7 @@ public class GitHubClient implements IGitHubClient {
 
             for (int i=0; i< jArray.length(); i++) {
                 JSONObject jObject = jArray.getJSONObject(i);
-                list.add(mRepoMapper.map(jObject));
+                list.add(RepositoryMapper.getInstance().map(jObject));
             }
 
         } catch (JSONException e) {
@@ -62,7 +56,7 @@ public class GitHubClient implements IGitHubClient {
         try {
             JSONObject jResult = new JSONObject(repoResponse);
 
-            Repository repo = mRepoMapper.map(jResult);
+            Repository repo = RepositoryMapper.getInstance().map(jResult);
 
             String find_branches_url = repo.getBranchesUrl().replace("{/branch}", "");
             String branchResponse = this.mConnectionManager.select(find_branches_url);
@@ -71,7 +65,7 @@ public class GitHubClient implements IGitHubClient {
 
             for (int i=0; i< jBranches.length(); i++) {
                 JSONObject jObject = jBranches.getJSONObject(i);
-                list.add(mBranchMapper.map(jObject));
+                list.add(BranchMapper.getInstance().map(jObject));
             }
 
 

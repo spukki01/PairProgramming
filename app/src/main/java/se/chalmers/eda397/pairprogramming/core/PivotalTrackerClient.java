@@ -10,11 +10,9 @@ import se.chalmers.eda397.pairprogramming.util.UserStoryMapper;
 public class PivotalTrackerClient implements IPivotalTrackerClient {
 
     private IConnectionManager mConnectionManager;
-    private IMapper<UserStory> mMapper;
 
     public PivotalTrackerClient(IConnectionManager connectionManager) {
         this.mConnectionManager = connectionManager;
-        this.mMapper = new UserStoryMapper();
     }
 
     @Override
@@ -25,7 +23,7 @@ public class PivotalTrackerClient implements IPivotalTrackerClient {
         UserStory us = null;
         try {
             JSONObject jResult = new JSONObject(response);
-            us = mMapper.map(jResult);
+            us = UserStoryMapper.getInstance().map(jResult);
         }
         catch (JSONException e) {
             e.printStackTrace();

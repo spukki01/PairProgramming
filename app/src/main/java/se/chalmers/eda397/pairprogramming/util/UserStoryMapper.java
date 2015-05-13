@@ -7,6 +7,15 @@ import se.chalmers.eda397.pairprogramming.model.UserStory;
 
 public class UserStoryMapper implements IMapper<UserStory>{
 
+    private static UserStoryMapper instance;
+
+    public static UserStoryMapper getInstance() {
+        if (instance == null){
+            instance = new UserStoryMapper();
+        }
+        return instance;
+    }
+
     @Override
     public UserStory map(JSONObject jsonObject) throws JSONException {
         UserStory us = new UserStory();
