@@ -1,6 +1,7 @@
 package se.chalmers.eda397.pairprogramming;
 
 import android.app.Activity;
+import android.app.ListFragment;
 import android.app.ProgressDialog;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -9,9 +10,13 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import se.chalmers.eda397.pairprogramming.adapter.BranchListAdapter;
+import se.chalmers.eda397.pairprogramming.adapter.CommitListAdapter;
 import se.chalmers.eda397.pairprogramming.core.ConnectionManager;
 import se.chalmers.eda397.pairprogramming.core.GitHubClient;
 import se.chalmers.eda397.pairprogramming.core.IGitHubClient;
@@ -26,7 +31,7 @@ import se.chalmers.eda397.pairprogramming.model.Commit;
  * Use the {@link CommitsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CommitsFragment extends Fragment {
+public class CommitsFragment extends ListFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_REPO_OWNER = "RepoOwner";
@@ -39,6 +44,10 @@ public class CommitsFragment extends Fragment {
     private String mBranchName;
 
     private View mRootView;
+
+    private CommitListAdapter mAdapter;
+
+    private List<Commit> mCommits = new ArrayList();
 
 
     private OnFragmentInteractionListener mListener;
@@ -80,6 +89,8 @@ public class CommitsFragment extends Fragment {
             mBranchName = getArguments().getString(ARG_BRANCH_NAME);
             new CommitsTask().execute(mRepoName, mRepoOwner, mBranchName);
         }
+        mAdapter = new CommitListAdapter(inflater.getContext(), mCommits);
+        this.setListAdapter(mAdapter);
 
         return mRootView;
     }
@@ -94,12 +105,7 @@ public class CommitsFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+        ((MainActivity) activity).onSectionAttached(0);
     }
 
     @Override
@@ -150,8 +156,14 @@ public class CommitsFragment extends Fragment {
         @Override
         protected void onPostExecute(List<Commit> result) {
             if (result.size() > 0) {
-                //ListView lw = (ListView)mRootView.findViewById(R.id.list_branches);
-                //lw.setAdapter(new BranchListAdapter(getActivity(), result));
+                mAdapter.clear();
+                mCommits = result;
+
+                mAdapter.addAll(mCommits);
+                mAdapter.notifyDataSetChanged();
+                /*
+                ListView lw = (ListView) mRootView.findViewById(R.id.commit_row);
+                lw.setAdapter(new CommitListAdapter(getActivity(), result));*/
             }
 
             mProgressDialog.dismiss();

@@ -2,26 +2,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="2dp"
-    android:id="@+id/branch_row"
+    android:id="@+id/commit_row"
     android:orientation="horizontal">
 
     <TextView
-        android:id="@+id/branch_name_text"
+        android:id="@+id/commit_message_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:textSize="18sp"
+        android:textSize="14sp"
         android:textStyle="bold"
-      />
-
+        />
     <TextView
-        android:id="@+id/latest_commit_text"
+        android:id="@+id/commit_author"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@id/branch_name_text"
+        android:layout_below="@id/commit_message_text"
         android:textSize="14sp"
         />
-
-
 </RelativeLayout>
