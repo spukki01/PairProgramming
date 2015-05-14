@@ -207,7 +207,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         Vibrator v = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
         v.vibrate(3000);
 
-        mEndText.setText(getString(R.string.timesup));
+        mEndText.setText(getString(R.string.timesUp));
 
         updateGUIWhenDone();
     }

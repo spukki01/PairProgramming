@@ -3,7 +3,6 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_planning_poker">PlanningPokerActivity</string>
 
     <string name="drawer_item_home">Home</string>
     <string name="drawer_item_planning_poker">Planning poker</string>
@@ -11,7 +10,13 @@
     <string name="drawer_item_timer">Timer</string>
 
     <string name="loading">Loading</string>
-    <string name="timesup">Times up!</string>
+    <string name="pleaseWaitWhile">Please wait while searching for</string>
+    <string name="repository">repository</string>
+    <string name="repositories">repositories...</string>
+    <string name="userStory">user story...</string>
+    <string name="branches">branches...</string>
+
+    <string name="timesUp">Times up!</string>
     <string name="ok">Ok</string>
 
     <string name="repo_item_add">+</string>

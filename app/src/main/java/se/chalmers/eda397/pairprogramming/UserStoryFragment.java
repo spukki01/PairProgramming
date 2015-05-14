@@ -77,10 +77,9 @@ public class UserStoryFragment extends Fragment {
 
         @Override
         protected void onPreExecute() {
-            mProgressDialog.setTitle(R.string.loading);
-            //TODO: remove hard coded string
-            mProgressDialog.setMessage("Please wait while searching for user story...");
-            mProgressDialog.show();
+            this.mProgressDialog.setTitle(R.string.loading);
+            this.mProgressDialog.setMessage(getString(R.string.pleaseWaitWhile) + " " + getString(R.string.userStory));
+            this.mProgressDialog.show();
 
             super.onPreExecute();
         }
@@ -98,7 +97,7 @@ public class UserStoryFragment extends Fragment {
             ((TextView)mRootView.findViewById(R.id.us_created)).setText(result.getCreatedDate());
             ((TextView)mRootView.findViewById(R.id.us_description)).setText(result.getDescription());
 
-            mProgressDialog.dismiss();
+            this.mProgressDialog.dismiss();
             super.onPostExecute(result);
         }
     }

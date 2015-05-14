@@ -108,8 +108,7 @@ public class RepositorySearchFragment extends ListFragment implements View.OnCli
         @Override
         protected void onPreExecute() {
             this.mProgressDialog.setTitle(R.string.loading);
-            //TODO: remove hard coded string
-            this.mProgressDialog.setMessage("Please wait while searching for repositories...");
+            this.mProgressDialog.setMessage(getString(R.string.pleaseWaitWhile) + " " + getString(R.string.repositories));
             this.mProgressDialog.show();
 
             super.onPreExecute();
