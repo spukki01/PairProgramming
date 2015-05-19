@@ -19,10 +19,13 @@ import se.chalmers.eda397.pairprogramming.util.RepositoryStorage;
 public class RepoListAdapter extends ArrayAdapter {
 
     private Context mContext;
+    private List<Repository> addedRepos;
+
 
     public RepoListAdapter(Context context, List items) {
         super(context, android.R.layout.simple_list_item_1, items);
         this.mContext = context;
+        addedRepos = RepositoryStorage.getInstance().fetchAll(context);
     }
 
     private class ViewHolder{
@@ -52,11 +55,25 @@ public class RepoListAdapter extends ArrayAdapter {
         final Repository item = (Repository)getItem(position);
         holder.titleText.setText("Name: " + item.getName() + " Owner: " + item.getOwnerName());
 
-
         Button repoButton = (Button)viewToUse.findViewById(R.id.addRepoButton);
+        repoButton.setText(mContext.getString(R.string.repo_item_add));
+
+        for (int i=0; i<addedRepos.size(); i++) {
+
+            Repository repo = addedRepos.get(i);
+            if (repo.getId() == item.getId() &&
+                    repo.getName().equals(item.getName()) &&
+                    repo.getOwnerName().equals(item.getOwnerName()))
+            {
+                repoButton.setText(mContext.getString(R.string.repo_item_remove));
+                break;
+            }
+        }
+
         repoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast toast = new Toast(mContext);
                 Button button = (Button)v;
                 String toastText = "";
                 try {
@@ -65,12 +82,19 @@ public class RepoListAdapter extends ArrayAdapter {
                         toastText = item.getName() + " is stored";
                         button.setText(mContext.getString(R.string.repo_item_remove));
                     }
-                } catch (Exception e) {
+                    else if (button.getText().equals(mContext.getString(R.string.repo_item_remove))){
+                        RepositoryStorage.getInstance().remove(item, mContext);
+                        toastText = item.getName() + " is removed";
+                        button.setText(mContext.getString(R.string.repo_item_add));
+                    }
+                }
+                catch (Exception e) {
                     toastText = "Unable to store: " + item.getName();
                     e.printStackTrace();
                 }
-
-                Toast.makeText(mContext, toastText, Toast.LENGTH_SHORT).show();
+                addedRepos = RepositoryStorage.getInstance().fetchAll(mContext);
+                toast.cancel();
+                toast.makeText(mContext, toastText, Toast.LENGTH_SHORT).show();
             }
         });
 

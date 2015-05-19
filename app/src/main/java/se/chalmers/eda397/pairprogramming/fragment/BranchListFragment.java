@@ -1,7 +1,7 @@
-package se.chalmers.eda397.pairprogramming;
+package se.chalmers.eda397.pairprogramming.fragment;
 
 import android.app.Activity;
-import android.app.Fragment;
+import android.app.ListFragment;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,15 +10,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import se.chalmers.eda397.pairprogramming.adapter.BranchAdapter;
+import se.chalmers.eda397.pairprogramming.MainActivity;
+import se.chalmers.eda397.pairprogramming.R;
+import se.chalmers.eda397.pairprogramming.adapter.BranchListAdapter;
 import se.chalmers.eda397.pairprogramming.core.ConnectionManager;
 import se.chalmers.eda397.pairprogramming.core.GitHubClient;
 import se.chalmers.eda397.pairprogramming.core.IGitHubClient;
 import se.chalmers.eda397.pairprogramming.model.Branch;
 
-public class BranchFragment extends Fragment {
+public class BranchListFragment extends ListFragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_REPO_OWNER = "RepoOwner";
@@ -29,13 +32,20 @@ public class BranchFragment extends Fragment {
 
     private View mRootView;
 
+    BranchListAdapter mAdapter;
 
-    public static BranchFragment newInstance(String repoName, String repoOwner) {
-        BranchFragment fragment = new BranchFragment();
+    private List<Branch> mBranches = new ArrayList();
+
+
+
+    public static BranchListFragment newInstance(String repoName, String repoOwner) {
+        BranchListFragment fragment = new BranchListFragment();
+
         Bundle args = new Bundle();
         args.putString(ARG_REPO_NAME, repoName);
         args.putString(ARG_REPO_OWNER, repoOwner);
         fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -43,7 +53,7 @@ public class BranchFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public BranchFragment() {
+    public BranchListFragment() {
     }
 
     @Override
@@ -56,14 +66,23 @@ public class BranchFragment extends Fragment {
             new BranchTask().execute(mRepoName, mRepoOwner);
         }
 
+        mAdapter = new BranchListAdapter(inflater.getContext(), mBranches);
+        this.setListAdapter(mAdapter);
+
         return mRootView;
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        //TODO remove 0 and fix correct thingy
+        //TODO remove 0 and fix header
         ((MainActivity) activity).onSectionAttached(0);
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        Branch item = (Branch)l.getItemAtPosition(position);
+        ((MainActivity)this.getActivity()).openCommitsFragment(mRepoName, mRepoOwner, item.getName());
     }
 
     private class BranchTask extends AsyncTask<String, List<Branch>, List<Branch>> {
@@ -77,10 +96,9 @@ public class BranchFragment extends Fragment {
 
         @Override
         protected void onPreExecute() {
-            mProgressDialog.setTitle(R.string.loading);
-            //TODO: remove hard coded string
-            mProgressDialog.setMessage("Please wait while searching for branches...");
-            mProgressDialog.show();
+            this.mProgressDialog.setTitle(R.string.loading);
+            this.mProgressDialog.setMessage(getString(R.string.pleaseWaitWhile) + " " + getString(R.string.branches));
+            this.mProgressDialog.show();
 
             super.onPreExecute();
         }
@@ -93,11 +111,14 @@ public class BranchFragment extends Fragment {
         @Override
         protected void onPostExecute(List<Branch> result) {
             if (result.size() > 0) {
-                ListView lw = (ListView)mRootView.findViewById(R.id.list_branches);
-                lw.setAdapter(new BranchAdapter(getActivity(), result));
+                mAdapter.clear();
+                mBranches = result;
+
+                mAdapter.addAll(mBranches);
+                mAdapter.notifyDataSetChanged();
             }
 
-            mProgressDialog.dismiss();
+            this.mProgressDialog.dismiss();
             super.onPostExecute(result);
         }
     }

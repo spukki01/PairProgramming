@@ -3,7 +3,6 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_planning_poker">PlanningPokerActivity</string>
 
     <string name="drawer_item_home">Home</string>
     <string name="drawer_item_planning_poker">Planning poker</string>
@@ -11,16 +10,29 @@
     <string name="drawer_item_timer">Timer</string>
 
     <string name="loading">Loading</string>
-    <string name="timesup">Times up!</string>
+    <string name="pleaseWaitWhile">Please wait while searching for</string>
+    <string name="repository">repository</string>
+    <string name="repositories">repositories...</string>
+    <string name="userStory">user story...</string>
+    <string name="branches">branches...</string>
+    <string name="commits">commits...</string>
+
+
+    <string name="timesUp">Times up!</string>
     <string name="ok">Ok</string>
 
     <string name="repo_item_add">+</string>
     <string name="repo_item_remove">-</string>
 
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="navigation_drawer_open">Open Navigation Drawer</string>
     <string name="navigation_drawer_close">Close Navigation Drawer</string>
     <string name="drawer_item_subscrided_repo">Your Repos</string>
+
+
+    <string name="user_story">User story</string>
+    <string name="us_type">Story type:</string>
+    <string name="us_desc">Description:</string>
+    <string name="us_created_date">Created date:</string>
+    <string name="us_estimated">Estimated:</string>
 </resources>

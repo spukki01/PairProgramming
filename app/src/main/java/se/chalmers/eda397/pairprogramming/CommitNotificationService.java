@@ -8,9 +8,14 @@ import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
+import java.util.List;
+
 import se.chalmers.eda397.pairprogramming.core.ConnectionManager;
 import se.chalmers.eda397.pairprogramming.core.GitHubClient;
 import se.chalmers.eda397.pairprogramming.core.IGitHubClient;
+import se.chalmers.eda397.pairprogramming.model.Branch;
+import se.chalmers.eda397.pairprogramming.model.Repository;
+import se.chalmers.eda397.pairprogramming.util.RepositoryStorage;
 
 public class CommitNotificationService extends IntentService{
 
@@ -25,13 +30,18 @@ public class CommitNotificationService extends IntentService{
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        String branch = "master";
-        String repo = "PairProgramming";
-        String owner = "spukki01";
-        int id = 001;
-        if(this.mGitHubClient.isCommitDifferent(repo, owner, branch)) {
-            this.mHandler.post(new DisplayToast(this, "Commit to: " + repo + "/" + owner + "/" + branch));
-            sendNotification(id, "Commit to: " + repo + "/" + owner + "/" + branch);
+        List<Repository> subscribedRepositories = RepositoryStorage.getInstance().fetchAll(getApplicationContext());
+        for(int i = 0; i<subscribedRepositories.size();i++) {
+            Repository item = subscribedRepositories.get(i);
+            String repo = item.getName();
+            String owner = item.getOwnerName();
+            List<Branch> branches = mGitHubClient.findRelatedBranches(repo,owner);
+            for(int x = 0; x<branches.size();x++) {
+                if (this.mGitHubClient.isCommitDifferent(repo, owner, branches.get(x).getName())) {
+                    this.mHandler.post(new DisplayToast(this, "Commit to: " + repo + "/" + owner + "/" + branches.get(x).getName()));
+                    sendNotification(Integer.parseInt(i + "" + x), "Commit to: " + repo + "/" + owner + "/" + branches.get(x).getName());
+                }
+            }
         }
 
     }

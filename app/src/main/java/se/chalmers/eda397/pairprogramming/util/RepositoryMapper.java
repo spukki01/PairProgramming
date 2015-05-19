@@ -7,6 +7,15 @@ import se.chalmers.eda397.pairprogramming.model.Repository;
 
 public class RepositoryMapper implements IMapper{
 
+    private static RepositoryMapper instance;
+
+    public static RepositoryMapper getInstance() {
+        if (instance == null){
+            instance = new RepositoryMapper();
+        }
+        return instance;
+    }
+
     @Override
     public Repository map(JSONObject jsonObject) throws JSONException {
         Repository repo = new Repository();

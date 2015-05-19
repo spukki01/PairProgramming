@@ -1,8 +1,7 @@
-package se.chalmers.eda397.pairprogramming;
+package se.chalmers.eda397.pairprogramming.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -11,6 +10,9 @@ import android.widget.Button;
 import android.view.View;
 import android.app.AlertDialog;
 import android.widget.TextView;
+
+import se.chalmers.eda397.pairprogramming.MainActivity;
+import se.chalmers.eda397.pairprogramming.R;
 
 public class PlanningPokerFragment extends Fragment implements View.OnClickListener {
 

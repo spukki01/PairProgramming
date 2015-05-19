@@ -11,7 +11,7 @@
 
     <Button
         android:layout_width="54dp"
-        android:layout_height="54dp"
+        android:layout_height="match_parent"
         android:text="@string/repo_item_add"
         android:id="@+id/addRepoButton"
         android:layout_centerVertical="true"

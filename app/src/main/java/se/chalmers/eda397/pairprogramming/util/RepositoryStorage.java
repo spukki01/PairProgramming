@@ -57,18 +57,15 @@ public class RepositoryStorage implements IStorage<Repository> {
         }
     }
 
+    @Override
     public boolean remove(Repository repository, Context context){
-        JSONObject jsonObject;
-        JSONArray array;
-        JSONObject temp;
-
         try {
-            jsonObject = readJsonFile(context.openFileInput(FILENAME));
-            array = jsonObject.getJSONArray("repositories");
+            JSONObject jsonObject = readJsonFile(context.openFileInput(FILENAME));
+            JSONArray array = jsonObject.getJSONArray("repositories");
 
             //loop through all repos in array to find the one we want to remove
             for(int i = 0; i < array.length(); i++){
-                temp = (JSONObject)array.get(i);
+                JSONObject temp = (JSONObject)array.get(i);
 
                 //We have found it if owner and name is the same.
                 if(temp.get("name").equals(repository.getName()) && temp.get("owner").equals(repository.getOwnerName())){

@@ -11,30 +11,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 import se.chalmers.eda397.pairprogramming.model.Branch;
+import se.chalmers.eda397.pairprogramming.model.Commit;
 import se.chalmers.eda397.pairprogramming.model.Repository;
 import se.chalmers.eda397.pairprogramming.util.BranchMapper;
-import se.chalmers.eda397.pairprogramming.util.IMapper;
+import se.chalmers.eda397.pairprogramming.util.CommitMapper;
 import se.chalmers.eda397.pairprogramming.util.RepositoryMapper;
 
 public class GitHubClient implements IGitHubClient {
 
     private IConnectionManager mConnectionManager;
-    private IMapper<Repository> mRepoMapper;
-    private IMapper<Branch> mBranchMapper;
-
 
     public GitHubClient(IConnectionManager connectionManager) {
         this.mConnectionManager = connectionManager;
-        this.mRepoMapper = new RepositoryMapper();
-        this.mBranchMapper = new BranchMapper();
     }
-
 
     @Override
     public List<Repository> findRepositories(String repoName) {
         String url = "https://api.github.com/search/repositories?q=" + repoName + "+in:name";
 
-        String response = this.mConnectionManager.executeQuery(url);
+        String response = this.mConnectionManager.select(url);
         List<Repository> list = new ArrayList<>();
         try {
             JSONObject jResult = new JSONObject(response);
@@ -42,7 +37,7 @@ public class GitHubClient implements IGitHubClient {
 
             for (int i=0; i< jArray.length(); i++) {
                 JSONObject jObject = jArray.getJSONObject(i);
-                list.add(mRepoMapper.map(jObject));
+                list.add(RepositoryMapper.getInstance().map(jObject));
             }
 
         } catch (JSONException e) {
@@ -56,26 +51,43 @@ public class GitHubClient implements IGitHubClient {
     public List<Branch> findRelatedBranches(String repoName, String repoOwner) {
         List<Branch> list = new ArrayList<>();
 
-        String find_repo_url = "https://api.github.com/search/repositories?q=user:"+repoOwner+"&repo:"+repoName;
-        String repoResponse = this.mConnectionManager.executeQuery(find_repo_url);
+        String find_repo_url = "https://api.github.com/repos/"+repoOwner+"/"+repoName;
+        String repoResponse = this.mConnectionManager.select(find_repo_url);
 
         try {
             JSONObject jResult = new JSONObject(repoResponse);
-            JSONArray jArray = jResult.getJSONArray("items");
 
-            if (jArray.length() == 1) {
-                Repository repo = mRepoMapper.map(jArray.getJSONObject(0));
+            Repository repo = RepositoryMapper.getInstance().map(jResult);
 
-                String find_branches_url = repo.getBranchesUrl().replace("{/branch}", "");
-                String branchResponse = this.mConnectionManager.executeQuery(find_branches_url);
+            String find_branches_url = repo.getBranchesUrl().replace("{/branch}", "");
+            String branchResponse = this.mConnectionManager.select(find_branches_url);
 
-                JSONArray jBranches = new JSONArray(branchResponse);
+            JSONArray jBranches = new JSONArray(branchResponse);
 
-                for (int i=0; i< jBranches.length(); i++) {
-                    JSONObject jObject = jBranches.getJSONObject(i);
-                    list.add(mBranchMapper.map(jObject));
-                }
+            for (int i=0; i< jBranches.length(); i++) {
+                JSONObject jObject = jBranches.getJSONObject(i);
+                list.add(BranchMapper.getInstance().map(jObject));
+            }
 
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    @Override
+    public List<Commit> findCommits(String repoName, String repoOwner, String branchName) {
+        String fetch_commits = "https://api.github.com/repos/" + repoOwner + "/" + repoName + "/commits?sha=" + branchName;
+        String repoResponse = this.mConnectionManager.select(fetch_commits);
+
+        List<Commit> list = new ArrayList<>();
+        try {
+            JSONArray jResultArray = new JSONArray(repoResponse);
+            for (int i=0; i<jResultArray.length(); i++) {
+                JSONObject jObject = jResultArray.getJSONObject(i);
+                list.add(CommitMapper.getInstance().map(jObject));
             }
 
         } catch (JSONException e) {
@@ -116,7 +128,7 @@ public class GitHubClient implements IGitHubClient {
     private String getLatestCommitSHA(String repository, String owner, String branch) {
         String commitSHA = "";
         String find_repo_url = "https://api.github.com/repos/" + owner + "/" + repository + "/branches/" + branch;
-        String repoResponse = this.mConnectionManager.executeQuery(find_repo_url);
+        String repoResponse = this.mConnectionManager.select(find_repo_url);
 
         try {
             JSONObject jResult = new JSONObject(repoResponse);

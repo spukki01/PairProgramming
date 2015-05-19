@@ -4,19 +4,27 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import se.chalmers.eda397.pairprogramming.core.ExceptionHandler;
+import se.chalmers.eda397.pairprogramming.fragment.CommitsFragment;
+import se.chalmers.eda397.pairprogramming.fragment.HomeFragment;
+import se.chalmers.eda397.pairprogramming.fragment.NavigationDrawerFragment;
+import se.chalmers.eda397.pairprogramming.fragment.PlanningPokerFragment;
+import se.chalmers.eda397.pairprogramming.fragment.RepositoryFragment;
+import se.chalmers.eda397.pairprogramming.fragment.RepositorySearchFragment;
+import se.chalmers.eda397.pairprogramming.fragment.SubscribedRepositoriesFragment;
+import se.chalmers.eda397.pairprogramming.fragment.TimerFragment;
+import se.chalmers.eda397.pairprogramming.fragment.UserStoryFragment;
 import se.chalmers.eda397.pairprogramming.model.Repository;
 
-public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks,
-        RepositoryFragment.OnFragmentInteractionListener {
+public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -31,7 +39,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     protected PendingIntent mPendingIntent;
     protected AlarmManager mAlarmManager;
 
-    protected static int ALARM_INTERVAL = 1000 * 60 * 15; //milliseconds * seconds * minutes
+    protected static int ALARM_INTERVAL = 1000 * 30 * 1; //milliseconds * seconds * minutes
 
     @Override
     protected void onStart() {
@@ -49,6 +57,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
+
         mAlarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(getApplicationContext(),  CommitNotificationReceiver.class);
         mPendingIntent = PendingIntent.getBroadcast(this, 1234567, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -58,9 +68,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         mNavigationDrawerFragment = (NavigationDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
 
-        mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout)findViewById(R.id.drawer_layout));
+        mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -156,18 +165,33 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                 .commit();
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
+    /*
+    * Is called form BranchListFragment when clicking a list item.
+    */
+    public void openCommitsFragment(String repoName, String repoOwner, String branchName){
+        CommitsFragment newFragment = CommitsFragment.newInstance(repoName, repoOwner, branchName);
+        getFragmentManager().beginTransaction()
+                .replace(R.id.container, newFragment)
+                .addToBackStack(null)
+                .commit();
+    }
 
+    public void openUserStoryFragment(int projectId, int userStoryId) {
+        UserStoryFragment newFragment = UserStoryFragment.newInstance(projectId, userStoryId);
+        getFragmentManager().beginTransaction()
+                .replace(R.id.container, newFragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override
     public void onBackPressed() {
         if (getFragmentManager().getBackStackEntryCount() > 0) {
             getFragmentManager().popBackStack();
-        }
-        else {
+        } else {
             super.onBackPressed();
         }
     }
+
+
 }
