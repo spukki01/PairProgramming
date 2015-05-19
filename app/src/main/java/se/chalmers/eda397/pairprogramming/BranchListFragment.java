@@ -1,7 +1,6 @@
 package se.chalmers.eda397.pairprogramming;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.app.ListFragment;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
@@ -39,10 +38,12 @@ public class BranchListFragment extends ListFragment {
 
     public static BranchListFragment newInstance(String repoName, String repoOwner) {
         BranchListFragment fragment = new BranchListFragment();
+
         Bundle args = new Bundle();
         args.putString(ARG_REPO_NAME, repoName);
         args.putString(ARG_REPO_OWNER, repoOwner);
         fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -113,9 +114,6 @@ public class BranchListFragment extends ListFragment {
 
                 mAdapter.addAll(mBranches);
                 mAdapter.notifyDataSetChanged();
-
-                /*ListView lw = (ListView)mRootView.findViewById(R.id.list_branches);
-                lw.setAdapter(new BranchListAdapter(getActivity(), result));*/
             }
 
             this.mProgressDialog.dismiss();

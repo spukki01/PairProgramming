@@ -15,18 +15,15 @@ import se.chalmers.eda397.pairprogramming.model.Commit;
 import se.chalmers.eda397.pairprogramming.model.Repository;
 import se.chalmers.eda397.pairprogramming.util.BranchMapper;
 import se.chalmers.eda397.pairprogramming.util.CommitMapper;
-import se.chalmers.eda397.pairprogramming.util.IMapper;
 import se.chalmers.eda397.pairprogramming.util.RepositoryMapper;
 
 public class GitHubClient implements IGitHubClient {
 
     private IConnectionManager mConnectionManager;
 
-
     public GitHubClient(IConnectionManager connectionManager) {
         this.mConnectionManager = connectionManager;
     }
-
 
     @Override
     public List<Repository> findRepositories(String repoName) {
@@ -82,15 +79,15 @@ public class GitHubClient implements IGitHubClient {
 
     @Override
     public List<Commit> findCommits(String repoName, String repoOwner, String branchName) {
-        List<Commit> list = new ArrayList<>();
-        // https://api.github.com/repos/spukki01/pairprogramming/commits?sha=feat/push-notifications
         String fetch_commits = "https://api.github.com/repos/" + repoOwner + "/" + repoName + "/commits?sha=" + branchName;
-        String repoResponse = this.mConnectionManager.executeQuery(fetch_commits);
+        String repoResponse = this.mConnectionManager.select(fetch_commits);
+
+        List<Commit> list = new ArrayList<>();
         try {
             JSONArray jResultArray = new JSONArray(repoResponse);
             for (int i=0; i<jResultArray.length(); i++) {
                 JSONObject jObject = jResultArray.getJSONObject(i);
-                list.add(mCommitMapper.map(jObject));
+                list.add(CommitMapper.getInstance().map(jObject));
             }
 
         } catch (JSONException e) {

@@ -3,10 +3,19 @@ package se.chalmers.eda397.pairprogramming.util;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import se.chalmers.eda397.pairprogramming.model.Branch;
 import se.chalmers.eda397.pairprogramming.model.Commit;
 
 public class CommitMapper implements IMapper<Commit> {
+
+    private static CommitMapper instance;
+
+    public static CommitMapper getInstance() {
+        if (instance == null){
+            instance = new CommitMapper();
+        }
+        return instance;
+    }
+
 
     @Override
     public Commit map(JSONObject jsonObject) throws JSONException {
