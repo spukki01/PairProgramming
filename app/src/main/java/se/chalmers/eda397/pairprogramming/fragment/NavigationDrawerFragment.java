@@ -1,4 +1,4 @@
-package se.chalmers.eda397.pairprogramming;
+package se.chalmers.eda397.pairprogramming.fragment;
 
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarActivity;
@@ -21,6 +21,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import se.chalmers.eda397.pairprogramming.R;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.

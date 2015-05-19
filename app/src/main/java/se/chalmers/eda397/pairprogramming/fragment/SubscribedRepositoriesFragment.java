@@ -1,4 +1,4 @@
-package se.chalmers.eda397.pairprogramming;
+package se.chalmers.eda397.pairprogramming.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -10,6 +10,8 @@ import android.widget.ListView;
 
 import java.util.List;
 
+import se.chalmers.eda397.pairprogramming.MainActivity;
+import se.chalmers.eda397.pairprogramming.R;
 import se.chalmers.eda397.pairprogramming.adapter.SubscribedRepositoryAdapter;
 import se.chalmers.eda397.pairprogramming.model.Repository;
 import se.chalmers.eda397.pairprogramming.util.RepositoryStorage;

@@ -13,6 +13,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import se.chalmers.eda397.pairprogramming.core.ExceptionHandler;
+import se.chalmers.eda397.pairprogramming.fragment.CommitsFragment;
+import se.chalmers.eda397.pairprogramming.fragment.HomeFragment;
+import se.chalmers.eda397.pairprogramming.fragment.NavigationDrawerFragment;
+import se.chalmers.eda397.pairprogramming.fragment.PlanningPokerFragment;
+import se.chalmers.eda397.pairprogramming.fragment.RepositoryFragment;
+import se.chalmers.eda397.pairprogramming.fragment.RepositorySearchFragment;
+import se.chalmers.eda397.pairprogramming.fragment.SubscribedRepositoriesFragment;
+import se.chalmers.eda397.pairprogramming.fragment.TimerFragment;
 import se.chalmers.eda397.pairprogramming.model.Repository;
 
 public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -147,7 +155,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     /*
     * Is called form RepositorySearchFragment when clicking a list item.
     */
-    protected void openRepositoryFragment(Repository repository){
+    public void openRepositoryFragment(Repository repository){
         RepositoryFragment newFragment = RepositoryFragment.newInstance(repository);
 
         getFragmentManager().beginTransaction()
@@ -159,7 +167,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     /*
     * Is called form BranchListFragment when clicking a list item.
     */
-    protected void openCommitsFragment(String repoName, String repoOwner, String branchName){
+    public void openCommitsFragment(String repoName, String repoOwner, String branchName){
         CommitsFragment newFragment = CommitsFragment.newInstance(repoName, repoOwner, branchName);
         getFragmentManager().beginTransaction()
                 .replace(R.id.container, newFragment)

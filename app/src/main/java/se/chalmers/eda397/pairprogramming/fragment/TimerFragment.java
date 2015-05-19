@@ -1,4 +1,4 @@
-package se.chalmers.eda397.pairprogramming;
+package se.chalmers.eda397.pairprogramming.fragment;
 
 import android.app.Activity;
 import android.content.Context;
@@ -16,6 +16,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.app.AlertDialog;
+
+import se.chalmers.eda397.pairprogramming.MainActivity;
+import se.chalmers.eda397.pairprogramming.R;
 
 
 public class TimerFragment extends Fragment implements View.OnClickListener {

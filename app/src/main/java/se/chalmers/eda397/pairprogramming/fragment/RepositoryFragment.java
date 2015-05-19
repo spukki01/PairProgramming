@@ -1,4 +1,4 @@
-package se.chalmers.eda397.pairprogramming;
+package se.chalmers.eda397.pairprogramming.fragment;
 
 import android.app.Activity;
 import android.app.FragmentTransaction;
@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import se.chalmers.eda397.pairprogramming.MainActivity;
+import se.chalmers.eda397.pairprogramming.R;
 import se.chalmers.eda397.pairprogramming.model.Repository;
 
 
