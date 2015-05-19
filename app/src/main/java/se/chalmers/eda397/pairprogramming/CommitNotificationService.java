@@ -35,14 +35,15 @@ public class CommitNotificationService extends IntentService{
             Repository item = subscribedRepositories.get(i);
             String repo = item.getName();
             String owner = item.getOwnerName();
-            String fileConflict;
+            //String fileConflict;
             List<Branch> branches = mGitHubClient.findRelatedBranches(repo,owner);
             for(int x = 0; x<branches.size();x++) {
                 if (this.mGitHubClient.isCommitDifferent(repo, owner, branches.get(x).getName())) {
                     this.mHandler.post(new DisplayToast(this, "Commit to: " + repo + "/" + owner + "/" + branches.get(x).getName()));
                     sendNotification(Integer.parseInt(i + "" + x), "Commit to: " + repo + "/" + owner + "/" + branches.get(x).getName());
                 }
-                for(int y = 0; y<branches.size();y++)
+                //taking up too many git requests
+                /*for(int y = 0; y<branches.size();y++)
                 {
                     if(x != y)
                     {
@@ -53,7 +54,7 @@ public class CommitNotificationService extends IntentService{
                         }
                     }
 
-                }
+                }*/
             }
         }
 
