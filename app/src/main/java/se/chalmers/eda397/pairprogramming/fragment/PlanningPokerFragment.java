@@ -40,6 +40,8 @@ public class PlanningPokerFragment extends Fragment implements View.OnClickListe
             if(v instanceof Button) v.setOnClickListener(this);
         }
 
+        this.buttonInit(rootView);
+
         return rootView;
     }
 
@@ -54,7 +56,6 @@ public class PlanningPokerFragment extends Fragment implements View.OnClickListe
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         builder.setMessage(((Button)v).getText())
-                .setTitle("Your chosen number")
                 .setNegativeButton(getString(R.string.ok), null);
 
         AlertDialog dialog = builder.create();
@@ -62,7 +63,55 @@ public class PlanningPokerFragment extends Fragment implements View.OnClickListe
         dialog.show();
 
         TextView textView = (TextView)dialog.findViewById(android.R.id.message);
-        textView.setTextSize(80);
+        if(textView.getText().toString().toLowerCase().equals("coffee") ||
+                textView.getText().toString().toLowerCase().equals("dunno")){
+            textView.setTextSize(80);
+        } else if (textView.getText().toString().equals("100") ||
+                textView.getText().toString().equals("1/2")) {
+            textView.setTextSize(150);
+        } else {
+            textView.setTextSize(200);
+        }
         textView.setGravity(Gravity.CENTER);
+    }
+
+    private void buttonInit(View v){
+        Button b = (Button) v.findViewById(R.id.first_row_first);
+        b.setOnClickListener(this);
+
+        b = (Button) v.findViewById(R.id.first_row_second);
+        b.setOnClickListener(this);
+
+        b = (Button) v.findViewById(R.id.first_row_third);
+        b.setOnClickListener(this);
+
+        b = (Button) v.findViewById(R.id.second_row_first);
+        b.setOnClickListener(this);
+
+        b = (Button) v.findViewById(R.id.second_row_second);
+        b.setOnClickListener(this);
+
+        b = (Button) v.findViewById(R.id.second_row_third);
+        b.setOnClickListener(this);
+
+        b = (Button) v.findViewById(R.id.third_row_first);
+        b.setOnClickListener(this);
+
+        b = (Button) v.findViewById(R.id.third_row_second);
+        b.setOnClickListener(this);
+
+        b = (Button) v.findViewById(R.id.third_row_third);
+        b.setOnClickListener(this);
+
+        b = (Button) v.findViewById(R.id.fourth_row_first);
+        b.setOnClickListener(this);
+
+        b = (Button) v.findViewById(R.id.fourth_row_second);
+        b.setOnClickListener(this);
+
+        b = (Button) v.findViewById(R.id.fourth_row_third);
+        b.setOnClickListener(this);
+
+
     }
 }
