@@ -3,10 +3,8 @@ package se.chalmers.eda397.pairprogramming;
 import android.app.Activity;
 import android.app.ListFragment;
 import android.app.ProgressDialog;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,34 +14,19 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import se.chalmers.eda397.pairprogramming.adapter.BranchListAdapter;
 import se.chalmers.eda397.pairprogramming.adapter.CommitListAdapter;
 import se.chalmers.eda397.pairprogramming.core.ConnectionManager;
 import se.chalmers.eda397.pairprogramming.core.GitHubClient;
 import se.chalmers.eda397.pairprogramming.core.IGitHubClient;
-import se.chalmers.eda397.pairprogramming.model.Branch;
 import se.chalmers.eda397.pairprogramming.model.Commit;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link CommitsFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link CommitsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class CommitsFragment extends ListFragment {
-    // TODO: Rename parameter arguments, choose names that match
+
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_REPO_OWNER = "RepoOwner";
     private static final String ARG_REPO_NAME= "RepoName";
     private static final String ARG_BRANCH_NAME = "BranchName";
-
-    // TODO: Rename and change types of parameters
-    private String mRepoOwner;
-    private String mRepoName;
-    private String mBranchName;
 
     private View mRootView;
 
@@ -52,10 +35,6 @@ public class CommitsFragment extends ListFragment {
     private List<Commit> mCommits = new ArrayList();
 
 
-    private OnFragmentInteractionListener mListener;
-
-
-    // TODO: Rename and change types and number of parameters
     public static CommitsFragment newInstance(String repoName, String repoOwner, String branchName) {
         CommitsFragment fragment = new CommitsFragment();
         Bundle args = new Bundle();
@@ -70,27 +49,18 @@ public class CommitsFragment extends ListFragment {
         // Required empty public constructor
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mRepoOwner = getArguments().getString(ARG_REPO_OWNER);
-            mRepoName = getArguments().getString(ARG_REPO_NAME);
-            mBranchName = getArguments().getString(ARG_BRANCH_NAME);
-        }
-    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_branch, container, false);
 
         if (getArguments() != null) {
-            mRepoOwner = getArguments().getString(ARG_REPO_OWNER);
-            mRepoName = getArguments().getString(ARG_REPO_NAME);
-            mBranchName = getArguments().getString(ARG_BRANCH_NAME);
-            new CommitsTask().execute(mRepoName, mRepoOwner, mBranchName);
+            String repoOwner = getArguments().getString(ARG_REPO_OWNER);
+            String repoName = getArguments().getString(ARG_REPO_NAME);
+            String branchName = getArguments().getString(ARG_BRANCH_NAME);
+            new CommitsTask().execute(repoName, repoOwner, branchName);
         }
+
         mAdapter = new CommitListAdapter(inflater.getContext(), mCommits);
         this.setListAdapter(mAdapter);
 
@@ -106,38 +76,10 @@ public class CommitsFragment extends ListFragment {
                 + "\n" + item.getDate().toString(), Toast.LENGTH_LONG ).show();
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         ((MainActivity) activity).onSectionAttached(0);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
     }
 
     private class CommitsTask extends AsyncTask<String, List<Commit>, List<Commit>> {
@@ -172,9 +114,6 @@ public class CommitsFragment extends ListFragment {
 
                 mAdapter.addAll(mCommits);
                 mAdapter.notifyDataSetChanged();
-                /*
-                ListView lw = (ListView) mRootView.findViewById(R.id.commit_row);
-                lw.setAdapter(new CommitListAdapter(getActivity(), result));*/
             }
 
             mProgressDialog.dismiss();
