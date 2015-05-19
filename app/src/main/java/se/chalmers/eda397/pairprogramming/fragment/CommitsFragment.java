@@ -96,8 +96,7 @@ public class CommitsFragment extends ListFragment {
         @Override
         protected void onPreExecute() {
             mProgressDialog.setTitle(R.string.loading);
-            //TODO: remove hard coded string
-            mProgressDialog.setMessage("Please wait while fetching commits...");
+            mProgressDialog.setMessage(getString(R.string.pleaseWaitWhile) + " " + getString(R.string.commits));
             mProgressDialog.show();
 
             super.onPreExecute();

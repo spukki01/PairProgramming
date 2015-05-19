@@ -15,6 +15,8 @@
     <string name="repositories">repositories...</string>
     <string name="userStory">user story...</string>
     <string name="branches">branches...</string>
+    <string name="commits">commits...</string>
+
 
     <string name="timesUp">Times up!</string>
     <string name="ok">Ok</string>
@@ -26,6 +28,9 @@
     <string name="navigation_drawer_open">Open Navigation Drawer</string>
     <string name="navigation_drawer_close">Close Navigation Drawer</string>
     <string name="drawer_item_subscrided_repo">Your Repos</string>
+
+
+    <string name="user_story">User story</string>
     <string name="us_type">Story type:</string>
     <string name="us_desc">Description:</string>
     <string name="us_created_date">Created date:</string>

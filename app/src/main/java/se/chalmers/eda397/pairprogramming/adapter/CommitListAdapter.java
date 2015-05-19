@@ -5,13 +5,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
 import se.chalmers.eda397.pairprogramming.R;
-import se.chalmers.eda397.pairprogramming.model.Branch;
 import se.chalmers.eda397.pairprogramming.model.Commit;
+import se.chalmers.eda397.pairprogramming.util.RepositoryStorage;
 
 
 public class CommitListAdapter extends ArrayAdapter<Commit> {
@@ -36,7 +38,7 @@ public class CommitListAdapter extends ArrayAdapter<Commit> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         final View rowView;
 
         if (convertView == null) {
@@ -51,16 +53,27 @@ public class CommitListAdapter extends ArrayAdapter<Commit> {
             TextView commitAuthorLabel = (TextView) rowView.findViewById(R.id.commit_author);
             holder.commitAuthor = commitAuthorLabel;
 
+       //     Button btn = (Button)rowView.findViewById(R.id.commit_open_pt_btn);
+       //     btn.setOnClickListener(new View.OnClickListener() {
+       //         @Override
+       //         public void onClick(View v) {
+       //             Toast.makeText(mContext, "Clicked row:" + position, Toast.LENGTH_SHORT).show();
+        //        }
+        //    });
+
+//            holder.userStoryButton = btn;
+
             rowView.setTag(holder);
         }
         else {
             rowView = convertView;
         }
 
-
         ViewHolder tag = (ViewHolder) rowView.getTag();
         tag.commitMessage.setText(this.mValues.get(position).getMessage());
         tag.commitAuthor.setText(this.mValues.get(position).getCommitter());
+
+      //  tag.userStoryButton.setVisibility(View.VISIBLE);
 
         return rowView;
     }
@@ -68,5 +81,6 @@ public class CommitListAdapter extends ArrayAdapter<Commit> {
     private static class ViewHolder {
         public TextView commitMessage;
         public TextView commitAuthor;
+       // public Button userStoryButton;
     }
 }

@@ -21,4 +21,16 @@
         android:layout_below="@id/commit_message_text"
         android:textSize="14sp"
         />
+
+    <Button
+        android:id="@+id/commit_open_pt_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/commit_message_text"
+        android:textSize="12sp"
+        android:layout_marginLeft="20dp"
+        android:text="@string/user_story"
+        android:visibility="invisible"
+        />
+
 </RelativeLayout>
