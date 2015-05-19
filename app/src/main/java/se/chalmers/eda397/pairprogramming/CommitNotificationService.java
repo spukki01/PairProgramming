@@ -35,11 +35,24 @@ public class CommitNotificationService extends IntentService{
             Repository item = subscribedRepositories.get(i);
             String repo = item.getName();
             String owner = item.getOwnerName();
+            String fileConflict;
             List<Branch> branches = mGitHubClient.findRelatedBranches(repo,owner);
             for(int x = 0; x<branches.size();x++) {
                 if (this.mGitHubClient.isCommitDifferent(repo, owner, branches.get(x).getName())) {
                     this.mHandler.post(new DisplayToast(this, "Commit to: " + repo + "/" + owner + "/" + branches.get(x).getName()));
                     sendNotification(Integer.parseInt(i + "" + x), "Commit to: " + repo + "/" + owner + "/" + branches.get(x).getName());
+                }
+                for(int y = 0; y<branches.size();y++)
+                {
+                    if(x != y)
+                    {
+                        fileConflict = this.mGitHubClient.compareBranch(repo, owner, branches.get(x).getName(),branches.get(y).getName());
+                        if(fileConflict != "")
+                        {
+                            sendNotification(Integer.parseInt(i + "" + x + "" + y), "Possible conflict on file: " + fileConflict);
+                        }
+                    }
+
                 }
             }
         }
