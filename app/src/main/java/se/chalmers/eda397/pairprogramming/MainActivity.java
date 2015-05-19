@@ -21,6 +21,7 @@ import se.chalmers.eda397.pairprogramming.fragment.RepositoryFragment;
 import se.chalmers.eda397.pairprogramming.fragment.RepositorySearchFragment;
 import se.chalmers.eda397.pairprogramming.fragment.SubscribedRepositoriesFragment;
 import se.chalmers.eda397.pairprogramming.fragment.TimerFragment;
+import se.chalmers.eda397.pairprogramming.fragment.UserStoryFragment;
 import se.chalmers.eda397.pairprogramming.model.Repository;
 
 public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -175,6 +176,13 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                 .commit();
     }
 
+    public void openUserStoryFragment(int projectId, int userStoryId) {
+        UserStoryFragment newFragment = UserStoryFragment.newInstance(projectId, userStoryId);
+        getFragmentManager().beginTransaction()
+                .replace(R.id.container, newFragment)
+                .addToBackStack(null)
+                .commit();
+    }
 
     @Override
     public void onBackPressed() {
@@ -184,4 +192,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
             super.onBackPressed();
         }
     }
+
+
 }
