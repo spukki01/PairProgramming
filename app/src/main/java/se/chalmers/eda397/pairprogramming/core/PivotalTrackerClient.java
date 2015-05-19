@@ -4,7 +4,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import se.chalmers.eda397.pairprogramming.model.UserStory;
-import se.chalmers.eda397.pairprogramming.util.IMapper;
 import se.chalmers.eda397.pairprogramming.util.UserStoryMapper;
 
 public class PivotalTrackerClient implements IPivotalTrackerClient {
