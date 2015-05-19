@@ -1,9 +1,14 @@
 package se.chalmers.eda397.pairprogramming;
 
 import android.app.Activity;
+import android.content.Context;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.app.Fragment;
+import android.os.Vibrator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +16,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
-
-import org.w3c.dom.Text;
 
 
 public class TimerFragment extends Fragment implements View.OnClickListener {
@@ -151,7 +153,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
             }
 
             public void onFinish() {
-                mEndText.setText(getString(R.string.timesup));
+                counterFinished();
                 updateGUIWhenDone();
             }
         }.start();
@@ -187,10 +189,27 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
             }
 
             public void onFinish() {
-                mEndText.setText(getString(R.string.timesup));
+                counterFinished();
                 updateGUIWhenDone();
             }
         }.start();
+    }
+
+    private void counterFinished() {
+        try {
+            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            Ringtone r = RingtoneManager.getRingtone(getActivity().getApplicationContext(), notification);
+            r.play();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Vibrator v = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(3000);
+
+        mEndText.setText(getString(R.string.timesUp));
+
+        updateGUIWhenDone();
     }
 
     private void updateGUIWhenDone() {

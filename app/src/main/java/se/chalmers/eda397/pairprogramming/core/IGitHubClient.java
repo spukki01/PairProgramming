@@ -11,4 +11,6 @@ public interface IGitHubClient {
     List<Repository> findRepositories(String repoName);
     List<Branch> findRelatedBranches(String repoName, String repoOwner);
     List<Commit> findCommits(String repoName, String repoOwner, String branch);
+
+    Boolean isCommitDifferent(String repository, String owner, String branch);
 }

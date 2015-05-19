@@ -14,6 +14,7 @@ import java.util.List;
 
 import se.chalmers.eda397.pairprogramming.R;
 import se.chalmers.eda397.pairprogramming.model.Repository;
+import se.chalmers.eda397.pairprogramming.util.RepositoryStorage;
 
 
 public class SubscribedRepositoryAdapter extends ArrayAdapter {
@@ -30,7 +31,7 @@ public class SubscribedRepositoryAdapter extends ArrayAdapter {
         }
 
         public View getView(int position, View convertView, ViewGroup parent) {
-            View viewToUse;
+            final View viewToUse;
             ViewHolder holder;
 
             // This block exists to inflate the settings list item conditionally based on whether
@@ -52,12 +53,17 @@ public class SubscribedRepositoryAdapter extends ArrayAdapter {
             final Repository item = (Repository)getItem(position);
             holder.titleText.setText("Name: " + item.getName() + " Owner: " + item.getOwnerName());
 
-            Button addRepoButton = (Button)viewToUse.findViewById(R.id.addRepoButton);
-            addRepoButton.setText(mContext.getString(R.string.repo_item_remove));
+            Button removeRepoButton = (Button)viewToUse.findViewById(R.id.addRepoButton);
+            removeRepoButton.setText(mContext.getString(R.string.repo_item_remove));
 
-            addRepoButton.setOnClickListener(new View.OnClickListener(){
+            removeRepoButton.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
+                    RepositoryStorage.getInstance().remove(item, mContext);
+                    clear();
+                    addAll(RepositoryStorage.getInstance().fetchAll(mContext));
+                    notifyDataSetChanged();
+
                     String toastText = item.getName() + " is removed";
                     Toast addRepoClickToast = Toast.makeText(mContext, toastText, Toast.LENGTH_SHORT);
                     addRepoClickToast.show();

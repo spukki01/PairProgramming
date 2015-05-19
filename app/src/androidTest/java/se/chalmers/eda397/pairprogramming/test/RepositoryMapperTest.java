@@ -10,21 +10,17 @@ import se.chalmers.eda397.pairprogramming.util.RepositoryMapper;
 
 public class RepositoryMapperTest extends TestCase {
 
-    private IMapper<Repository> mMapper;
-
-
     @Override
     protected void setUp() throws Exception
     {
         super.setUp();
-        this.mMapper = new RepositoryMapper();
     }
 
     public void testMap() throws Exception {
         String jsonString = "{ id:123, private:false, description:something, name:PairProgramming, owner: {login:apa} }";
         JSONObject json = new JSONObject(jsonString);
 
-        Repository repo = this.mMapper.map(json);
+        Repository repo = RepositoryMapper.getInstance().map(json);
 
         assertEquals(123, repo.getId());
         assertEquals(false, repo.isPrivate());

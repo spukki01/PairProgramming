@@ -72,7 +72,7 @@ public class BranchListFragment extends ListFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        //TODO remove 0 and fix correct thingy
+        //TODO remove 0 and fix header
         ((MainActivity) activity).onSectionAttached(0);
     }
 
@@ -93,10 +93,9 @@ public class BranchListFragment extends ListFragment {
 
         @Override
         protected void onPreExecute() {
-            mProgressDialog.setTitle(R.string.loading);
-            //TODO: remove hard coded string
-            mProgressDialog.setMessage("Please wait while searching for branches...");
-            mProgressDialog.show();
+            this.mProgressDialog.setTitle(R.string.loading);
+            this.mProgressDialog.setMessage(getString(R.string.pleaseWaitWhile) + " " + getString(R.string.branches));
+            this.mProgressDialog.show();
 
             super.onPreExecute();
         }
@@ -119,7 +118,7 @@ public class BranchListFragment extends ListFragment {
                 lw.setAdapter(new BranchListAdapter(getActivity(), result));*/
             }
 
-            mProgressDialog.dismiss();
+            this.mProgressDialog.dismiss();
             super.onPostExecute(result);
         }
     }

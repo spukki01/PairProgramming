@@ -1,6 +1,7 @@
 package se.chalmers.eda397.pairprogramming;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -98,8 +99,19 @@ public class RepositorySearchFragment extends ListFragment implements View.OnCli
     private class RepositoryTask extends AsyncTask<String, List<Repository>, List<Repository>> {
 
         private IGitHubClient mGitHubClient;
+        private ProgressDialog mProgressDialog = new ProgressDialog(getActivity());
+
         private RepositoryTask () {
             mGitHubClient = new GitHubClient(new ConnectionManager());
+        }
+
+        @Override
+        protected void onPreExecute() {
+            this.mProgressDialog.setTitle(R.string.loading);
+            this.mProgressDialog.setMessage(getString(R.string.pleaseWaitWhile) + " " + getString(R.string.repositories));
+            this.mProgressDialog.show();
+
+            super.onPreExecute();
         }
 
         @Override
@@ -116,6 +128,7 @@ public class RepositorySearchFragment extends ListFragment implements View.OnCli
                 mAdapter.addAll(mRepositories);
                 mAdapter.notifyDataSetChanged();
             }
+            this.mProgressDialog.dismiss();
             super.onPostExecute(result);
         }
     }

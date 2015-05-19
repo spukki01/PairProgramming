@@ -50,7 +50,6 @@ public class SubscribedRepositoriesFragment extends ListFragment {
 
         SubscribedRepositoryAdapter adapter = new SubscribedRepositoryAdapter(inflater.getContext(), subscribedRepositories);
         this.setListAdapter(adapter);
-
         return mRootView;
     }
 

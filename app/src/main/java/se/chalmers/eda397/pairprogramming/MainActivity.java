@@ -1,20 +1,22 @@
 package se.chalmers.eda397.pairprogramming;
 
-import android.net.Uri;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import se.chalmers.eda397.pairprogramming.model.Branch;
 import se.chalmers.eda397.pairprogramming.model.Repository;
 
-public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks,
-        RepositoryFragment.OnFragmentInteractionListener {
+public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -26,9 +28,21 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
      */
     private CharSequence mTitle;
 
+    protected PendingIntent mPendingIntent;
+    protected AlarmManager mAlarmManager;
+
+    protected static int ALARM_INTERVAL = 1000 * 30 * 1; //milliseconds * seconds * minutes
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
+
+        mAlarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(getApplicationContext(),  CommitNotificationReceiver.class);
+        mPendingIntent = PendingIntent.getBroadcast(this, 1234567, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
         setContentView(R.layout.activity_main);
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
@@ -40,6 +54,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -56,10 +71,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
-        // update the main content by replacing fragments
         Fragment fragment;
-        FragmentManager fragmentManager = getFragmentManager();
-
         switch(position) {
             default:
             case 0:
@@ -78,7 +90,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                 fragment = TimerFragment.newInstance(5);
                 break;
         }
-        fragmentManager.beginTransaction()
+
+        getFragmentManager().beginTransaction()
                 .replace(R.id.container, fragment)
                 .commit();
     }
@@ -137,18 +150,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                 .commit();
     }
 
-    public void openCommitsFragment(String repoName, String repoOwner, String branchName){
-        CommitsFragment newFragment = CommitsFragment.newInstance(repoName, repoOwner, branchName);
-        getFragmentManager().beginTransaction()
-                .replace(R.id.container, newFragment)
-                .addToBackStack(null)
-                .commit();
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
 
     @Override
     public void onBackPressed() {
