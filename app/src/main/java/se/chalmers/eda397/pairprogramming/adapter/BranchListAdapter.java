@@ -64,6 +64,8 @@ public class BranchListAdapter extends ArrayAdapter<Branch>  {
 
         ViewHolder tag = (ViewHolder) rowView.getTag();
         tag.branchName.setText(this.mValues.get(position).getName());
+
+        //TODO: fix hard coded commit date to show date of latest commit
         tag.latestCommitDate.setText("2015-04-02 [Hard coded]");
 
         return rowView;

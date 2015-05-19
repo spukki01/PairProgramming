@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import se.chalmers.eda397.pairprogramming.MainActivity;
 import se.chalmers.eda397.pairprogramming.R;
 import se.chalmers.eda397.pairprogramming.model.Commit;
 import se.chalmers.eda397.pairprogramming.util.RepositoryStorage;
@@ -41,27 +42,16 @@ public class CommitListAdapter extends ArrayAdapter<Commit> {
     public View getView(final int position, View convertView, ViewGroup parent) {
         final View rowView;
 
+
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             rowView = inflater.inflate(R.layout.commit_row, parent, false);
 
             ViewHolder holder = new ViewHolder();
 
-            TextView commitMessageLabel = (TextView) rowView.findViewById(R.id.commit_message_text);
-            holder.commitMessage = commitMessageLabel;
-
-            TextView commitAuthorLabel = (TextView) rowView.findViewById(R.id.commit_author);
-            holder.commitAuthor = commitAuthorLabel;
-
-       //     Button btn = (Button)rowView.findViewById(R.id.commit_open_pt_btn);
-       //     btn.setOnClickListener(new View.OnClickListener() {
-       //         @Override
-       //         public void onClick(View v) {
-       //             Toast.makeText(mContext, "Clicked row:" + position, Toast.LENGTH_SHORT).show();
-        //        }
-        //    });
-
-//            holder.userStoryButton = btn;
+            holder.commitMessage = (TextView) rowView.findViewById(R.id.commit_message_text);
+            holder.commitAuthor = (TextView) rowView.findViewById(R.id.commit_author);
+            holder.userStoryButton = (Button)rowView.findViewById(R.id.commit_open_pt_btn);
 
             rowView.setTag(holder);
         }
@@ -69,11 +59,28 @@ public class CommitListAdapter extends ArrayAdapter<Commit> {
             rowView = convertView;
         }
 
+        String commitMessage = this.mValues.get(position).getMessage();
+
         ViewHolder tag = (ViewHolder) rowView.getTag();
-        tag.commitMessage.setText(this.mValues.get(position).getMessage());
+        tag.commitMessage.setText(commitMessage);
         tag.commitAuthor.setText(this.mValues.get(position).getCommitter());
 
-      //  tag.userStoryButton.setVisibility(View.VISIBLE);
+        if (commitMessage.contains("#PT")) {
+
+            //TODO: handle parse error
+            String[] parts = commitMessage.split("#PT")[1].split(":");
+            final int projectId = Integer.parseInt(parts[0]);
+            final int userStoryId = Integer.parseInt(parts[1]);
+
+            tag.userStoryButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((MainActivity)mContext).openUserStoryFragment(projectId, userStoryId);
+                }
+            });
+
+            tag.userStoryButton.setVisibility(View.VISIBLE);
+        }
 
         return rowView;
     }
@@ -81,6 +88,6 @@ public class CommitListAdapter extends ArrayAdapter<Commit> {
     private static class ViewHolder {
         public TextView commitMessage;
         public TextView commitAuthor;
-       // public Button userStoryButton;
+        public Button userStoryButton;
     }
 }
