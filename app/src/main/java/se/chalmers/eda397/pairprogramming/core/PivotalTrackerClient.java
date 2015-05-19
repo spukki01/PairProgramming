@@ -15,7 +15,7 @@ public class PivotalTrackerClient implements IPivotalTrackerClient {
     }
 
     @Override
-    public UserStory fetchUserStory(int projectId, int storyId) {
+    public UserStory fetchUserStory(long projectId, long storyId) {
         String find_repo_url = "https://www.pivotaltracker.com/services/v5/projects/"+projectId+"/stories/"+storyId;
         String response = this.mConnectionManager.select(find_repo_url);
 

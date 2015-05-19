@@ -23,17 +23,17 @@ public class UserStoryFragment extends Fragment {
     private static final String ARG_PROJECT_ID = "param_project_id";
     private static final String ARG_STORY_ID = "param_story_id";
 
-    private int mProjectId;
-    private int mStoryId;
+    private long mProjectId;
+    private long mStoryId;
 
     private View mRootView;
 
-    public static UserStoryFragment newInstance(int projectId, int storyId) {
+    public static UserStoryFragment newInstance(long projectId, long storyId) {
         UserStoryFragment fragment = new UserStoryFragment();
 
         Bundle args = new Bundle();
-        args.putInt(ARG_PROJECT_ID, projectId);
-        args.putInt(ARG_STORY_ID, storyId);
+        args.putLong(ARG_PROJECT_ID, projectId);
+        args.putLong(ARG_STORY_ID, storyId);
         fragment.setArguments(args);
 
         return fragment;
@@ -47,8 +47,8 @@ public class UserStoryFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mProjectId = getArguments().getInt(ARG_PROJECT_ID);
-            mStoryId = getArguments().getInt(ARG_STORY_ID);
+            mProjectId = getArguments().getLong(ARG_PROJECT_ID);
+            mStoryId = getArguments().getLong(ARG_STORY_ID);
         }
     }
 
@@ -68,7 +68,7 @@ public class UserStoryFragment extends Fragment {
         ((MainActivity) activity).onSectionAttached(0);
     }
 
-    private class UserStoryTask extends AsyncTask<Integer, UserStory, UserStory> {
+    private class UserStoryTask extends AsyncTask<Long, UserStory, UserStory> {
 
         private IPivotalTrackerClient mPivotalTrackerClient;
         private ProgressDialog mProgressDialog = new ProgressDialog(getActivity());
@@ -87,7 +87,7 @@ public class UserStoryFragment extends Fragment {
         }
 
         @Override
-        protected UserStory doInBackground(Integer... args) {
+        protected UserStory doInBackground(Long... args) {
             return this.mPivotalTrackerClient.fetchUserStory(args[0], args[1]);
         }
 
