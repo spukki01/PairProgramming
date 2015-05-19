@@ -39,6 +39,7 @@ public class ConnectionManager implements IConnectionManager {
 
     private String executeStatement(HttpRequestBase request) {
         HttpClient httpclient = new DefaultHttpClient();
+        // HELLO THERE! THIS IS A MERGE CONFLICT! HAHAHAHAHAHHA
         HttpResponse response;
         String responseString;
 
