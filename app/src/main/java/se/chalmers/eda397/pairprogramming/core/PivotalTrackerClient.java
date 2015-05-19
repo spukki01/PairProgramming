@@ -4,7 +4,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import se.chalmers.eda397.pairprogramming.model.UserStory;
-import se.chalmers.eda397.pairprogramming.util.IMapper;
 import se.chalmers.eda397.pairprogramming.util.UserStoryMapper;
 
 public class PivotalTrackerClient implements IPivotalTrackerClient {
@@ -16,7 +15,7 @@ public class PivotalTrackerClient implements IPivotalTrackerClient {
     }
 
     @Override
-    public UserStory fetchUserStory(int projectId, int storyId) {
+    public UserStory fetchUserStory(long projectId, long storyId) {
         String find_repo_url = "https://www.pivotaltracker.com/services/v5/projects/"+projectId+"/stories/"+storyId;
         String response = this.mConnectionManager.select(find_repo_url);
 

@@ -7,14 +7,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
 import se.chalmers.eda397.pairprogramming.MainActivity;
 import se.chalmers.eda397.pairprogramming.R;
 import se.chalmers.eda397.pairprogramming.model.Commit;
-import se.chalmers.eda397.pairprogramming.util.RepositoryStorage;
 
 
 public class CommitListAdapter extends ArrayAdapter<Commit> {
@@ -66,11 +64,10 @@ public class CommitListAdapter extends ArrayAdapter<Commit> {
         tag.commitAuthor.setText(this.mValues.get(position).getCommitter());
 
         if (commitMessage.contains("#PT")) {
-
-            //TODO: handle parse error
             String[] parts = commitMessage.split("#PT")[1].split(":");
-            final int projectId = Integer.parseInt(parts[0]);
-            final int userStoryId = Integer.parseInt(parts[1]);
+
+            final long projectId = Long.parseLong(parts[0].replaceAll("[^\\d.]", ""));
+            final long userStoryId = Long.parseLong(parts[1].split(" ")[0].replaceAll("[^\\d.]", ""));
 
             tag.userStoryButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -90,4 +87,6 @@ public class CommitListAdapter extends ArrayAdapter<Commit> {
         public TextView commitAuthor;
         public Button userStoryButton;
     }
+
+
 }

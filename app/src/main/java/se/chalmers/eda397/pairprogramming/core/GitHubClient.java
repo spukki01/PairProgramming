@@ -140,4 +140,21 @@ public class GitHubClient implements IGitHubClient {
         return commitSHA;
     }
 
+    public String compareBranch(String repository, String owner, String branch, String branchCompare) {
+        String changes = "";
+        String find_repo_url = "https://api.github.com/repos/" + owner + "/" + repository + "/compare/" + branch + "..." + branchCompare;
+        String repoResponse = this.mConnectionManager.select(find_repo_url);
+        String fileName = "";
+        try {
+            JSONObject jResult = new JSONObject(repoResponse);
+            if(jResult.getJSONObject("files") != null) {
+                fileName = jResult.getJSONObject("files").getString("fileName");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return fileName;
+    }
+
 }

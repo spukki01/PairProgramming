@@ -6,17 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-
 
 import java.util.List;
 
-import se.chalmers.eda397.pairprogramming.MainActivity;
 import se.chalmers.eda397.pairprogramming.R;
 import se.chalmers.eda397.pairprogramming.model.Branch;
-import se.chalmers.eda397.pairprogramming.util.RepositoryStorage;
 
 public class BranchListAdapter extends ArrayAdapter<Branch>  {
 

@@ -162,7 +162,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                 .commit();
     }
 
-    public void openUserStoryFragment(int projectId, int userStoryId) {
+    public void openUserStoryFragment(long projectId, long userStoryId) {
         UserStoryFragment newFragment = UserStoryFragment.newInstance(projectId, userStoryId);
         getFragmentManager().beginTransaction()
                 .replace(R.id.container, newFragment)
