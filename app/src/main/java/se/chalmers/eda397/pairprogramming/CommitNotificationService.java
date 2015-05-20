@@ -34,16 +34,19 @@ public class CommitNotificationService extends IntentService{
         List<Repository> subscribedRepositories = RepositoryStorage.getInstance().fetchAll(getApplicationContext());
 
         for(int i = 0; i < subscribedRepositories.size(); i++) {
-            Repository item = subscribedRepositories.get(i);
-            String repo = item.getName();
-            String owner = item.getOwnerName();
+            Repository repo = subscribedRepositories.get(i);
 
-            List<Branch> branches = mGitHubClient.findRelatedBranches(repo,owner);
+            if (!repo.isCommitNotificationOn() && !repo.isMergeNotificationOn()) continue;
+
+            String repoName = repo.getName();
+            String owner = repo.getOwnerName();
+
+            List<Branch> branches = mGitHubClient.findRelatedBranches(repoName, owner);
             for(int x = 0; x < branches.size(); x++) {
 
                 //Check only if commits have been made to master branch
-                if (branches.get(x).getName().equals("master")) {
-                    if (this.mGitHubClient.isCommitDifferent(repo, owner, branches.get(x).getName())) {
+                if (repo.isCommitNotificationOn() && branches.get(x).getName().equals("master")) {
+                    if (this.mGitHubClient.isCommitDifferent(repoName, owner, branches.get(x).getName())) {
                         String message = "Commit to: " + repo + "/" + owner + "/" + branches.get(x).getName();
 
                         this.mHandler.post(new DisplayToast(this, message));
@@ -51,12 +54,14 @@ public class CommitNotificationService extends IntentService{
                     }
                 }
 
-                for(int y = x; y < branches.size(); y++) {
-                    if(x != y) {
-                      //  Log.d("Performance counter:", "x=" + branches.get(x).getName() + " y=" + branches.get(y).getName());
-                        String fileConflict = this.mGitHubClient.compareBranch(repo, owner, branches.get(x).getName(),branches.get(y).getName());
-                        if (fileConflict.length() > 0) {
-                            sendNotification(Integer.parseInt(i + "" + x + "" + y), "Possible conflict on file: " + fileConflict);
+                if (repo.isMergeNotificationOn()) {
+                    for (int y = x; y < branches.size(); y++) {
+                        if (x != y) {
+                            //  Log.d("Performance counter:", "x=" + branches.get(x).getName() + " y=" + branches.get(y).getName());
+                            String fileConflict = this.mGitHubClient.compareBranch(repoName, owner, branches.get(x).getName(), branches.get(y).getName());
+                            if (fileConflict.length() > 0) {
+                                sendNotification(Integer.parseInt(i + "" + x + "" + y), "Possible conflict on file: " + fileConflict);
+                            }
                         }
                     }
                 }

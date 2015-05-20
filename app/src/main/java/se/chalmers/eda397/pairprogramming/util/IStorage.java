@@ -9,6 +9,8 @@ import java.util.List;
 public interface IStorage<T> {
 
     void store(T t, Context context) throws JSONException;
+    void update(T t, Context context);
+
 
     List<T> fetchAll(Context context);
 

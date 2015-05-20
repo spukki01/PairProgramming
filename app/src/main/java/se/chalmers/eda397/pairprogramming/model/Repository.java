@@ -10,6 +10,8 @@ public class Repository implements Serializable {
     private boolean isPrivate;
     private String description;
     private String branchesUrl;
+    private boolean isMergeNotificationOn;
+    private boolean isCommitNotificationOn;
 
 
     public int getId() {
@@ -59,6 +61,19 @@ public class Repository implements Serializable {
         this.branchesUrl = branchesUrl;
     }
 
+    public boolean isMergeNotificationOn() {
+        return isMergeNotificationOn;
+    }
 
+    public void setIsMergeNotificationOn(boolean isMergeNotificationOn) {
+        this.isMergeNotificationOn = isMergeNotificationOn;
+    }
 
+    public boolean isCommitNotificationOn() {
+        return isCommitNotificationOn;
+    }
+
+    public void setIsCommitNotificationOn(boolean isCommitNotificationOn) {
+        this.isCommitNotificationOn = isCommitNotificationOn;
+    }
 }

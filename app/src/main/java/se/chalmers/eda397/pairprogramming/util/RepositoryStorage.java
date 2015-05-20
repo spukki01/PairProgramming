@@ -58,6 +58,18 @@ public class RepositoryStorage implements IStorage<Repository> {
     }
 
     @Override
+    public void update(Repository repository, Context context) {
+        if (this.remove(repository, context)) {
+            try {
+                this.store(repository, context);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                //TODO: Do something useful
+            }
+        }
+    }
+
+    @Override
     public boolean remove(Repository repository, Context context){
         try {
             JSONObject jsonObject = readJsonFile(context.openFileInput(FILENAME));
@@ -108,12 +120,16 @@ public class RepositoryStorage implements IStorage<Repository> {
             JSONArray array = jsonObject.getJSONArray("repositories");
             for (int i = 0; i < array.length(); i++) {
                 Repository repo = new Repository();
+
                 JSONObject temp = array.getJSONObject(i);
                 repo.setId(temp.getInt("id"));
                 repo.setDescription(temp.getString("description"));
                 repo.setOwnerName(temp.getString("owner"));
                 repo.setPrivate(temp.getBoolean("isPrivate"));
                 repo.setName(temp.getString("name"));
+
+                repo.setIsMergeNotificationOn(temp.getBoolean("isMergeNotificationOn"));
+                repo.setIsCommitNotificationOn(temp.getBoolean("isCommitNotificationOn"));
 
                 if(temp.has("branchesURL")){
                     repo.setBranchesUrl(temp.getString("branchesURL"));
@@ -153,12 +169,14 @@ public class RepositoryStorage implements IStorage<Repository> {
             jsonObject.put("isPrivate", r.isPrivate());
             jsonObject.put("description", r.getDescription());
             jsonObject.put("branchesURL", r.getBranchesUrl());
+            jsonObject.put("isMergeNotificationOn", r.isMergeNotificationOn());
+            jsonObject.put("isCommitNotificationOn", r.isCommitNotificationOn());
+
             return jsonObject;
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
-
     }
 
 

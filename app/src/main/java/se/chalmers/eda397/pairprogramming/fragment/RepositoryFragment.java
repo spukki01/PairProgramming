@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.util.List;
@@ -24,6 +23,7 @@ public class RepositoryFragment extends Fragment implements View.OnClickListener
     private static final String ARG_REPOSITORY = "arg_repository";
 
     private Repository mRepository;
+    private View mRootView;
 
     public static RepositoryFragment newInstance(Repository repo) {
         RepositoryFragment fragment = new RepositoryFragment();
@@ -50,12 +50,12 @@ public class RepositoryFragment extends Fragment implements View.OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_repository, container, false);
+        mRootView = inflater.inflate(R.layout.fragment_repository, container, false);
 
         //Set text views
-        ((TextView) rootView.findViewById(R.id.repo_name_text)).setText(mRepository.getName());
-        ((TextView) rootView.findViewById(R.id.repo_owner_text)).setText("Owner: " + mRepository.getOwnerName());
-        ((TextView) rootView.findViewById(R.id.repo_desc)).setText(mRepository.getDescription());
+        ((TextView) mRootView.findViewById(R.id.repo_name_text)).setText(mRepository.getName());
+        ((TextView) mRootView.findViewById(R.id.repo_owner_text)).setText("Owner: " + mRepository.getOwnerName());
+        ((TextView) mRootView.findViewById(R.id.repo_desc)).setText(mRepository.getDescription());
 
         List<Repository> repos = RepositoryStorage.getInstance().fetchAll(getActivity());
         for (int i=0; i<repos.size(); i++) {
@@ -66,15 +66,17 @@ public class RepositoryFragment extends Fragment implements View.OnClickListener
                     repo.getName().equals(mRepository.getName()) &&
                     repo.getOwnerName().equals(mRepository.getOwnerName()))
             {
-                ToggleButton commitToggle = (ToggleButton) rootView.findViewById(R.id.commit_togglebutton);
+                ToggleButton commitToggle = (ToggleButton) mRootView.findViewById(R.id.commit_togglebutton);
                 commitToggle.setOnClickListener(this);
+                commitToggle.setChecked(mRepository.isCommitNotificationOn());
                 commitToggle.setVisibility(View.VISIBLE);
-                rootView.findViewById(R.id.commit_toggle_text).setVisibility(View.VISIBLE);
+                mRootView.findViewById(R.id.commit_toggle_text).setVisibility(View.VISIBLE);
 
-                ToggleButton mergeToggle = (ToggleButton) rootView.findViewById(R.id.merge_togglebutton);
+                ToggleButton mergeToggle = (ToggleButton) mRootView.findViewById(R.id.merge_togglebutton);
                 mergeToggle.setOnClickListener(this);
+                mergeToggle.setChecked(mRepository.isMergeNotificationOn());
                 mergeToggle.setVisibility(View.VISIBLE);
-                rootView.findViewById(R.id.merge_toggle_text).setVisibility(View.VISIBLE);
+                mRootView.findViewById(R.id.merge_toggle_text).setVisibility(View.VISIBLE);
                 break;
             }
         }
@@ -83,7 +85,7 @@ public class RepositoryFragment extends Fragment implements View.OnClickListener
         Fragment branchFragment = BranchListFragment.newInstance(mRepository.getName(), mRepository.getOwnerName());
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.add(R.id.branch_fragment_container, branchFragment).commit();
-        return rootView;
+        return mRootView;
     }
 
     @Override
@@ -95,17 +97,12 @@ public class RepositoryFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-        boolean isChecked = ((ToggleButton)v).isChecked();
+        boolean isMergeChecked = ((ToggleButton)mRootView.findViewById(R.id.merge_togglebutton)).isChecked();
+        boolean isCommitChecked = ((ToggleButton)mRootView.findViewById(R.id.commit_togglebutton)).isChecked();
 
-        switch (v.getId()) {
-            case R.id.commit_togglebutton:
-                Toast.makeText(getActivity(), "Commit: " + isChecked, Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.merge_togglebutton:
-                Toast.makeText(getActivity(), "Merge: " + isChecked, Toast.LENGTH_SHORT).show();
-                break;
-        }
+        mRepository.setIsMergeNotificationOn(isMergeChecked);
+        mRepository.setIsCommitNotificationOn(isCommitChecked);
 
-
+        RepositoryStorage.getInstance().update(mRepository, getActivity());
     }
 }
