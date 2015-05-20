@@ -3,29 +3,86 @@
     android:layout_height="match_parent"
     tools:context="se.chalmers.eda397.pairprogramming.fragment.RepositoryFragment">
 
-    <TextView android:layout_width="wrap_content"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/repo_name_text"
         android:text="DEFAULT REPOSITORY NAME"
         android:textSize="24dp"
         android:layout_alignParentTop="true"/>
-    <TextView android:layout_width="wrap_content"
+
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/repo_owner_text"
         android:text="DEFAULT OWNER TEXT"
         android:textSize="16dp"
         android:textStyle="italic"
         android:layout_below="@+id/repo_name_text"/>
-    <TextView android:layout_width="wrap_content"
+
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/repo_desc"
         android:text="DEFAULT Description text"
         android:textSize="16dp"
         android:layout_below="@+id/repo_owner_text"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:id="@+id/commit_toggle_text"
+        android:text="@string/notifyAboutCommits"
+        android:textSize="16dp"
+        android:layout_below="@+id/repo_desc"
+        android:visibility="invisible"
+        />
+
+    <ToggleButton
+        android:id="@+id/commit_togglebutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="22dp"
+        android:layout_below="@+id/repo_desc"
+        android:layout_toRightOf="@+id/commit_toggle_text"
+        android:textOn="@string/on"
+        android:textOff="@string/off"
+        android:visibility="invisible"
+       />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:id="@+id/merge_toggle_text"
+        android:text="Notify about merge conflicts:"
+        android:textSize="16dp"
+        android:layout_below="@+id/commit_toggle_text"
+        android:visibility="invisible"
+        />
+
+    <ToggleButton
+        android:id="@+id/merge_togglebutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_below="@+id/commit_toggle_text"
+        android:layout_toRightOf="@+id/merge_toggle_text"
+        android:textOn="@string/on"
+        android:textOff="@string/off"
+        android:visibility="invisible"
+        />
+
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/branch_fragment_container"
-        android:layout_below="@+id/repo_desc"
+        android:layout_below="@+id/merge_togglebutton"
         />
+
+
 </RelativeLayout>

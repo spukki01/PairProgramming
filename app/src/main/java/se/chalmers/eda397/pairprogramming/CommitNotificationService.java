@@ -53,7 +53,7 @@ public class CommitNotificationService extends IntentService{
 
                 for(int y = x; y < branches.size(); y++) {
                     if(x != y) {
-                        //Log.d("Performance counter: x=", branches.get(x).getName() + " y=" + branches.get(y).getName());
+                      //  Log.d("Performance counter:", "x=" + branches.get(x).getName() + " y=" + branches.get(y).getName());
                         String fileConflict = this.mGitHubClient.compareBranch(repo, owner, branches.get(x).getName(),branches.get(y).getName());
                         if (fileConflict.length() > 0) {
                             sendNotification(Integer.parseInt(i + "" + x + "" + y), "Possible conflict on file: " + fileConflict);

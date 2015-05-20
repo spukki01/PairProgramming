@@ -35,4 +35,8 @@
     <string name="us_desc">Description:</string>
     <string name="us_created_date">Created date:</string>
     <string name="us_estimated">Estimated:</string>
+
+    <string name="on">On</string>
+    <string name="off">Off</string>
+    <string name="notifyAboutCommits">Notify about new commits:</string>
 </resources>
