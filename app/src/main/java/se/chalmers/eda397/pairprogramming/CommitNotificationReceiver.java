@@ -7,8 +7,7 @@ import android.content.Intent;
 public class CommitNotificationReceiver extends BroadcastReceiver {
 
     @Override
-    public void onReceive(Context context, Intent intent)
-    {
+    public void onReceive(Context context, Intent intent) {
         Intent inService = new Intent(context, CommitNotificationService.class);
         context.startService(inService);
     }

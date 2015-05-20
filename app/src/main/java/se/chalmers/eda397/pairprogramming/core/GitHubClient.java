@@ -79,17 +79,17 @@ public class GitHubClient implements IGitHubClient {
 
     @Override
     public List<Commit> findCommits(String repoName, String repoOwner, String branchName) {
-        String fetch_commits = "https://api.github.com/repos/" + repoOwner + "/" + repoName + "/commits?sha=" + branchName;
-        String repoResponse = this.mConnectionManager.select(fetch_commits);
+        String url = "https://api.github.com/repos/" + repoOwner + "/" + repoName + "/commits?sha=" + branchName;
+        String repoResponse = this.mConnectionManager.select(url);
 
         List<Commit> list = new ArrayList<>();
         try {
             JSONArray jResultArray = new JSONArray(repoResponse);
+
             for (int i=0; i<jResultArray.length(); i++) {
                 JSONObject jObject = jResultArray.getJSONObject(i);
                 list.add(CommitMapper.getInstance().map(jObject));
             }
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -98,13 +98,12 @@ public class GitHubClient implements IGitHubClient {
     }
 
     @Override
-    public Boolean isCommitDifferent(String repository, String owner, String branch)
+    public Boolean isCommitDifferent(String repository, String owner, String branch, Context context)
     {
         String latestCommitSHA = getLatestCommitSHA(repository, owner, branch);
 
         boolean isDifferent = false;
         try {
-            Context context = applicationContextProvider.getContext();
             SharedPreferences sharedPref = context.getSharedPreferences("gitSavedData", Context.MODE_PRIVATE);
 
             String defaultValue = "error";
@@ -128,14 +127,16 @@ public class GitHubClient implements IGitHubClient {
     @Override
     public String compareBranch(String repository, String owner, String branch, String branchCompare) {
         String fileName = "";
-
-        String compare_branch_url = "https://api.github.com/repos/" + owner + "/" + repository + "/compare/" + branch + "..." + branchCompare;
-        String response = this.mConnectionManager.select(compare_branch_url);
+        String url = "https://api.github.com/repos/" + owner + "/" + repository + "/compare/" + branch + "..." + branchCompare;
+        String response = this.mConnectionManager.select(url);
 
         try {
             JSONObject jResult = new JSONObject(response);
-            if(jResult.getJSONObject("files") != null) {
-                fileName = jResult.getJSONObject("files").getString("fileName");
+            if (jResult.has("files")) {
+                JSONArray files = jResult.getJSONArray("files");
+                for (int i=0; i < files.length(); i++) {
+                    fileName += files.getJSONObject(i).getString("filename") + "/n";
+                }
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -146,8 +147,8 @@ public class GitHubClient implements IGitHubClient {
 
     private String getLatestCommitSHA(String repository, String owner, String branch) {
         String commitSHA = "";
-        String find_repo_url = "https://api.github.com/repos/" + owner + "/" + repository + "/branches/" + branch;
-        String repoResponse = this.mConnectionManager.select(find_repo_url);
+        String url = "https://api.github.com/repos/" + owner + "/" + repository + "/branches/" + branch;
+        String repoResponse = this.mConnectionManager.select(url);
 
         try {
             JSONObject jResult = new JSONObject(repoResponse);

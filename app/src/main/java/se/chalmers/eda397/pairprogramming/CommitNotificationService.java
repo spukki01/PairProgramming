@@ -46,7 +46,11 @@ public class CommitNotificationService extends IntentService{
 
                 //Check only if commits have been made to master branch
                 if (repo.isCommitNotificationOn() && branches.get(x).getName().equals("master")) {
-                    if (this.mGitHubClient.isCommitDifferent(repoName, owner, branches.get(x).getName())) {
+                    Log.d("Commit: ", repo.getName() + "/" + branches.get(x).getName());
+
+                    boolean isCommitDifferent = this.mGitHubClient.isCommitDifferent(repoName, owner, branches.get(x).getName(), getApplicationContext());
+
+                    if (isCommitDifferent) {
                         String message = "Commit to: " + repo + "/" + owner + "/" + branches.get(x).getName();
 
                         this.mHandler.post(new DisplayToast(this, message));
@@ -55,6 +59,8 @@ public class CommitNotificationService extends IntentService{
                 }
 
                 if (repo.isMergeNotificationOn()) {
+                    Log.d("Merge: ", repo.getName() + "/" + branches.get(x).getName());
+
                     for (int y = x; y < branches.size(); y++) {
                         if (x != y) {
                             //  Log.d("Performance counter:", "x=" + branches.get(x).getName() + " y=" + branches.get(y).getName());
