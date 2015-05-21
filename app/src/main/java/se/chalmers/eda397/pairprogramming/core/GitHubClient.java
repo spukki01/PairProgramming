@@ -98,8 +98,9 @@ public class GitHubClient implements IGitHubClient {
     }
 
     @Override
-    public Boolean isCommitDifferent(String repository, String owner, String branch, Context context)
-    {
+    public Boolean isCommitDifferent(String repository, String owner, String branch, Context context) {
+        final String key = owner + "/" + repository + "/" + branch;
+
         String latestCommitSHA = getLatestCommitSHA(repository, owner, branch);
 
         boolean isDifferent = false;
@@ -107,13 +108,13 @@ public class GitHubClient implements IGitHubClient {
             SharedPreferences sharedPref = context.getSharedPreferences("gitSavedData", Context.MODE_PRIVATE);
 
             String defaultValue = "error";
-            String previousSHA = sharedPref.getString(branch, defaultValue);
+            String previousSHA = sharedPref.getString(key, defaultValue);
 
             isDifferent = !previousSHA.equals(latestCommitSHA);
 
             if (isDifferent) {
                 SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putString(branch, latestCommitSHA);
+                editor.putString(key, latestCommitSHA);
                 editor.commit();
             }
 
