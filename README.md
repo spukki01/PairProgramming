@@ -8,7 +8,3 @@ Group 11 - Members:
 - Marcus Isaksson
 - Grace Barathy Packianathan
 - Chistophe van Baalen
-- Kehinde Olaniyan
-
-
-(This info should be updated)
