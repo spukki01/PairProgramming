@@ -12,6 +12,7 @@ public interface IGitHubClient {
 
     List<Repository> findRepositories(String repoName);
     List<Branch> findRelatedBranches(String repoName, String repoOwner);
+    List<Branch> findRelatedBranches(String repoName, String repoOwner, boolean includeLatestCommitDate);
     List<Commit> findCommits(String repoName, String repoOwner, String branch);
     Boolean isCommitDifferent(String repository, String owner, String branch, Context context);
     String compareBranch(String repository, String owner, String branch, String branchCompare);

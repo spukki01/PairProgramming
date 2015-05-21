@@ -11,6 +11,7 @@ import java.util.List;
 
 import se.chalmers.eda397.pairprogramming.R;
 import se.chalmers.eda397.pairprogramming.model.Branch;
+import se.chalmers.eda397.pairprogramming.util.DateHelper;
 
 public class BranchListAdapter extends ArrayAdapter<Branch>  {
 
@@ -42,12 +43,8 @@ public class BranchListAdapter extends ArrayAdapter<Branch>  {
             rowView = inflater.inflate(R.layout.branch_row, parent, false);
 
             ViewHolder holder = new ViewHolder();
-
-            TextView branchNameLabel = (TextView) rowView.findViewById(R.id.branch_name_text);
-            holder.branchName = branchNameLabel;
-
-            TextView latestCommitLabel = (TextView) rowView.findViewById(R.id.latest_commit_text);
-            holder.latestCommitDate = latestCommitLabel;
+            holder.branchName = (TextView) rowView.findViewById(R.id.branch_name_text);
+            holder.latestCommitDate = (TextView) rowView.findViewById(R.id.latest_commit_text);
 
             rowView.setTag(holder);
         }
@@ -55,12 +52,13 @@ public class BranchListAdapter extends ArrayAdapter<Branch>  {
             rowView = convertView;
         }
 
+        Branch branch = this.mValues.get(position);
 
         ViewHolder tag = (ViewHolder) rowView.getTag();
-        tag.branchName.setText(this.mValues.get(position).getName());
+        tag.branchName.setText(branch.getName());
 
-        //TODO: fix hard coded commit date to show date of latest commit
-        tag.latestCommitDate.setText("2015-04-02 [Hard coded]");
+        if (branch.getLatestCommitDate() != null)
+            tag.latestCommitDate.setText(DateHelper.getInstance().toSimpleDateString(branch.getLatestCommitDate()));
 
         return rowView;
     }

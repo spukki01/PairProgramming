@@ -1,7 +1,8 @@
 package se.chalmers.eda397.pairprogramming.model;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import se.chalmers.eda397.pairprogramming.util.DateHelper;
 
 public class Commit {
     private String committer;
@@ -26,18 +27,11 @@ public class Commit {
     }
 
     public String getDate() {
-
         return date.toString();
     }
 
     public void setDate(String dateString) {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        try {
-            this. date = formatter.parse(dateString);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        this.date = DateHelper.getInstance().parseDate(dateString);
     }
 
     public void setCommitter(String committer) {

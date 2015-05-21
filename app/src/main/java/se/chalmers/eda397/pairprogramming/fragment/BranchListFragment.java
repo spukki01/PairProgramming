@@ -105,7 +105,7 @@ public class BranchListFragment extends ListFragment {
 
         @Override
         protected List<Branch> doInBackground(String... args) {
-            return this.mGitHubClient.findRelatedBranches(args[0], args[1]);
+            return this.mGitHubClient.findRelatedBranches(args[0], args[1], true);
         }
 
         @Override

@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import se.chalmers.eda397.pairprogramming.model.Branch;
@@ -15,6 +16,7 @@ import se.chalmers.eda397.pairprogramming.model.Commit;
 import se.chalmers.eda397.pairprogramming.model.Repository;
 import se.chalmers.eda397.pairprogramming.util.BranchMapper;
 import se.chalmers.eda397.pairprogramming.util.CommitMapper;
+import se.chalmers.eda397.pairprogramming.util.DateHelper;
 import se.chalmers.eda397.pairprogramming.util.RepositoryMapper;
 
 public class GitHubClient implements IGitHubClient {
@@ -27,7 +29,7 @@ public class GitHubClient implements IGitHubClient {
 
     @Override
     public List<Repository> findRepositories(String repoName) {
-        String url = "https://api.github.com/search/repositories?q=" + repoName + "+in:name";
+        final String url = "https://api.github.com/search/repositories?q=" + repoName + "+in:name";
 
         String response = this.mConnectionManager.select(url);
         List<Repository> list = new ArrayList<>();
@@ -49,6 +51,11 @@ public class GitHubClient implements IGitHubClient {
 
     @Override
     public List<Branch> findRelatedBranches(String repoName, String repoOwner) {
+        return findRelatedBranches(repoName, repoOwner, false);
+    }
+
+    @Override
+    public List<Branch> findRelatedBranches(String repoName, String repoOwner, boolean includeLatestCommitDate) {
         List<Branch> list = new ArrayList<>();
 
         String find_repo_url = "https://api.github.com/repos/"+repoOwner+"/"+repoName;
@@ -66,7 +73,13 @@ public class GitHubClient implements IGitHubClient {
 
             for (int i=0; i< jBranches.length(); i++) {
                 JSONObject jObject = jBranches.getJSONObject(i);
-                list.add(BranchMapper.getInstance().map(jObject));
+                Branch branch = BranchMapper.getInstance().map(jObject);
+
+                if (includeLatestCommitDate) {
+                    branch.setLatestCommitDate(getLatestCommitDate(repoOwner, repoName, branch.getName()));
+                }
+
+                list.add(branch);
             }
 
 
@@ -79,12 +92,12 @@ public class GitHubClient implements IGitHubClient {
 
     @Override
     public List<Commit> findCommits(String repoName, String repoOwner, String branchName) {
-        String url = "https://api.github.com/repos/" + repoOwner + "/" + repoName + "/commits?sha=" + branchName;
-        String repoResponse = this.mConnectionManager.select(url);
+        final String url = "https://api.github.com/repos/" + repoOwner + "/" + repoName + "/commits?sha=" + branchName;
+        String response = this.mConnectionManager.select(url);
 
         List<Commit> list = new ArrayList<>();
         try {
-            JSONArray jResultArray = new JSONArray(repoResponse);
+            JSONArray jResultArray = new JSONArray(response);
 
             for (int i=0; i<jResultArray.length(); i++) {
                 JSONObject jObject = jResultArray.getJSONObject(i);
@@ -127,10 +140,10 @@ public class GitHubClient implements IGitHubClient {
 
     @Override
     public String compareBranch(String repository, String owner, String branch, String branchCompare) {
-        String fileName = "";
-        String url = "https://api.github.com/repos/" + owner + "/" + repository + "/compare/" + branch + "..." + branchCompare;
+        final String url = "https://api.github.com/repos/" + owner + "/" + repository + "/compare/" + branch + "..." + branchCompare;
         String response = this.mConnectionManager.select(url);
 
+        String fileName = "";
         try {
             JSONObject jResult = new JSONObject(response);
             if (jResult.has("files")) {
@@ -147,18 +160,34 @@ public class GitHubClient implements IGitHubClient {
     }
 
     private String getLatestCommitSHA(String repository, String owner, String branch) {
-        String commitSHA = "";
-        String url = "https://api.github.com/repos/" + owner + "/" + repository + "/branches/" + branch;
-        String repoResponse = this.mConnectionManager.select(url);
+        final String url = "https://api.github.com/repos/" + owner + "/" + repository + "/branches/" + branch;
+        String response = this.mConnectionManager.select(url);
 
+        String commitSHA = "";
         try {
-            JSONObject jResult = new JSONObject(repoResponse);
+            JSONObject jResult = new JSONObject(response);
             commitSHA = jResult.getJSONObject("commit").getString("sha");
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         return commitSHA;
+    }
+
+    private Date getLatestCommitDate(String owner, String repo, String branch) {
+        final String url = "https://api.github.com/repos/" + owner + "/" + repo + "/branches/" + branch;
+        String response = this.mConnectionManager.select(url);
+
+        Date commitDate = null;
+        try {
+            JSONObject jResult = new JSONObject(response).getJSONObject("commit").getJSONObject("commit").getJSONObject("committer");
+
+            commitDate = DateHelper.getInstance().parseDate(jResult.getString("date"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return commitDate;
     }
 
 }
