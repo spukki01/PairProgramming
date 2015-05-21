@@ -118,7 +118,7 @@ public class RepositorySearchFragment extends ListFragment implements View.OnCli
 
         @Override
         protected List<Repository> doInBackground(String... repoName) {
-            return this.mGitHubClient.findRepositories(repoName[0]);
+            return this.mGitHubClient.findRepositories(repoName[0].trim());
         }
 
         @Override
