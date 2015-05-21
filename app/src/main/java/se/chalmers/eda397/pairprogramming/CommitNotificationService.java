@@ -46,27 +46,22 @@ public class CommitNotificationService extends IntentService{
 
                 //Check only if commits have been made to master branch
                 if (repo.isCommitNotificationOn() && branches.get(x).getName().equals("master")) {
-                    Log.d("Commit: ", repo.getName() + "/" + branches.get(x).getName());
-
                     boolean isCommitDifferent = this.mGitHubClient.isCommitDifferent(repoName, owner, branches.get(x).getName(), getApplicationContext());
 
                     if (isCommitDifferent) {
                         String message = "Commit to: " + repo + "/" + owner + "/" + branches.get(x).getName();
 
                         this.mHandler.post(new DisplayToast(this, message));
-                        sendNotification(Integer.parseInt(i + "" + x), message);
+                        sendNotification(Integer.parseInt(i + "" + x), "New Commit", message);
                     }
                 }
 
                 if (repo.isMergeNotificationOn()) {
-                    Log.d("Merge: ", repo.getName() + "/" + branches.get(x).getName());
-
                     for (int y = x; y < branches.size(); y++) {
                         if (x != y) {
-                            //  Log.d("Performance counter:", "x=" + branches.get(x).getName() + " y=" + branches.get(y).getName());
                             String fileConflict = this.mGitHubClient.compareBranch(repoName, owner, branches.get(x).getName(), branches.get(y).getName());
                             if (fileConflict.length() > 0) {
-                                sendNotification(Integer.parseInt(i + "" + x + "" + y), "Possible conflict on file: " + fileConflict);
+                                sendNotification(Integer.parseInt(i + "" + x + "" + y), "Possible conflict",  "In file(s): " + fileConflict);
                             }
                         }
                     }
@@ -76,10 +71,10 @@ public class CommitNotificationService extends IntentService{
         }
     }
 
-    private void sendNotification(int id, String text) {
+    private void sendNotification(int id, String title, String text) {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
                                                                     .setSmallIcon(R.drawable.ic_drawer)
-                                                                    .setContentTitle("New Commit")
+                                                                    .setContentTitle(title)
                                                                     .setContentText(text);
 
         //Gets an instance of the NotificationManager service
